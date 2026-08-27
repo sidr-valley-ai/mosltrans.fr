@@ -1,0 +1,29 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+# Base de données locale (jamais de vraies données de leads versionnées)
+*.sqlite
+*.sqlite3
+*.db
+
+# Front (AssetMapper : pas de build step, mais au cas où)
+/node_modules/
+/public/build/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
