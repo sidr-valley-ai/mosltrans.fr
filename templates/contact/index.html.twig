@@ -3,12 +3,45 @@
 {% block title %}Contact
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/contact.css') }}">
+{% endblock %}
+
 {% block body %}
-	<h1>Contact</h1>
+	<main class="contact-page">
+		<section class="contact-card">
+			<h1>Contactez-nous</h1>
 
-	{{ form_start(form) }}
-	{{ form_widget(form) }}
+			<p class="contact-intro">
+				Une question ? Envoyez-nous un message.
+			</p>
 
-	<button type="submit">Envoyer</button>
-	{{ form_end(form) }}
+			{{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
+
+			<div class="form-field">
+				{{ form_label(form.name, 'Nom') }}
+				{{ form_widget(form.name) }}
+				{{ form_errors(form.name) }}
+			</div>
+
+			<div class="form-field">
+				{{ form_label(form.email, 'Adresse e-mail') }}
+				{{ form_widget(form.email) }}
+				{{ form_errors(form.email) }}
+			</div>
+
+			<div class="form-field">
+				{{ form_label(form.message, 'Message') }}
+				{{ form_widget(form.message) }}
+				{{ form_errors(form.message) }}
+			</div>
+
+			<button type="submit" class="contact-button">
+				Envoyer
+			</button>
+
+			{{ form_end(form) }}
+		</section>
+	</main>
 {% endblock %}
