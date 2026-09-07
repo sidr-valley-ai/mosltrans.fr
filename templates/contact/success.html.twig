@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/contact.css') }}">
+{% endblock %}
+
+{% block body %}
+	<main class="contact-page">
+		<section class="contact-card">
+			<h1>Merci pour votre message !</h1>
+
+			<p class="contact-intro">
+				Votre demande a bien été envoyée.
+			</p>
+
+			<a href="{{ path('app_contact') }}" class="contact-button">
+				Retour au formulaire
+			</a>
+		</section>
+	</main>
+{% endblock %}
