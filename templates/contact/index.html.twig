@@ -1,47 +1,245 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/contact.css') }}">
+{% block title %}Contact - MOSLTRANS
 {% endblock %}
 
 {% block body %}
-	<main class="contact-page">
-		<section class="contact-card">
-			<h1>Contactez-nous</h1>
 
-			<p class="contact-intro">
-				Une question ? Envoyez-nous un message.
-			</p>
+	<main
+		class="relative min-h-screen overflow-hidden bg-slate-50 px-4 py-6 sm:px-8 lg:px-12">
 
-			{{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
+		{# ================= DÉCOR : CAMION ================= #}
 
-			<div class="form-field">
-				{{ form_label(form.name, 'Nom') }}
-				{{ form_widget(form.name) }}
-				{{ form_errors(form.name) }}
+		<div class="pointer-events-none absolute right-0 top-24 hidden h-[520px] w-[24%] overflow-hidden lg:block">
+
+			<img
+			src="{{ asset('images/camion.jpg') }}" alt="" class="h-full w-full object-cover">
+
+			{# Fondu à gauche #}
+			<div class="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-slate-50 to-transparent"></div>
+
+			{# Fondu à droite #}
+			<div class="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-slate-50 to-transparent"></div>
+
+			{# Fondu en haut #}
+			<div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-slate-50 to-transparent"></div>
+
+			{# Fondu en bas #}
+			<div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 to-transparent"></div>
+
+		</div>
+
+
+		{# ================= DÉCOR : GLOBE ================= #}
+
+		<img
+		src="{{ asset('images/globe.jpg') }}" alt="" class="absolute bottom-0 left-0 z-0 hidden w-[430px] opacity-60 mix-blend-multiply lg:block">
+
+
+		{# ================= EN-TÊTE ================= #}
+
+		<header class="relative z-10 mx-auto flex max-w-7xl items-start justify-between">
+
+			<img src="{{ asset('images/logo.png') }}" alt="MOSLTRANS - Logistique et transport" class="h-20 w-auto object-contain sm:h-24">
+
+			<div class="hidden text-right sm:block">
+				<p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
+					Plus loin
+				</p>
+
+				<p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
+					ensemble
+				</p>
+
+				<div class="ml-auto mt-2 h-0.5 w-14 rounded-full bg-blue-500"></div>
 			</div>
 
-			<div class="form-field">
-				{{ form_label(form.email, 'Adresse e-mail') }}
-				{{ form_widget(form.email) }}
-				{{ form_errors(form.email) }}
-			</div>
+		</header>
 
-			<div class="form-field">
-				{{ form_label(form.message, 'Message') }}
-				{{ form_widget(form.message) }}
-				{{ form_errors(form.message) }}
-			</div>
 
-			<button type="submit" class="contact-button">
-				Envoyer
-			</button>
+		{# ================= CONTENU ================= #}
 
-			{{ form_end(form) }}
-		</section>
+		<div
+			class="relative z-10 mx-auto mt-8 grid max-w-7xl items-start gap-10 lg:grid-cols-[260px_minmax(0,820px)_220px]">
+
+
+			{# ================= TEXTE GAUCHE ================= #}
+
+			<section class="hidden pt-16 lg:block">
+
+				<h2 class="text-4xl font-light leading-tight text-slate-800">
+					Votre<br>
+					logistique,
+					<br>
+
+					<span class="font-semibold text-blue-600">
+						notre priorité
+					</span>
+				</h2>
+
+				<div class="mt-5 h-0.5 w-12 rounded-full bg-blue-500"></div>
+
+
+				<ul class="mt-8 space-y-5 text-slate-600">
+
+					<li class="flex items-center gap-3">
+						<span class="text-xl text-blue-600">📦</span>
+						<span>Transport</span>
+					</li>
+
+					<li class="flex items-center gap-3">
+						<span class="text-xl text-blue-600">📍</span>
+						<span>Suivi</span>
+					</li>
+
+					<li class="flex items-center gap-3">
+						<span class="text-xl text-blue-600">✓</span>
+						<span>Fiabilité</span>
+					</li>
+
+				</ul>
+
+			</section>
+
+
+			{# ================= FORMULAIRE ================= #}
+
+			<section
+				class="w-full rounded-3xl bg-white p-6 shadow-xl shadow-slate-300/30 sm:p-10">
+
+				{# Icône #}
+
+				<div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+
+					<svg class="h-8 w-8 text-slate-700" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+						<rect x="2.5" y="5" width="19" height="14" rx="2.5"/>
+						<path d="M3 7l9 6 9-6"/>
+					</svg>
+
+				</div>
+
+
+				{# Titre #}
+
+				<div class="mb-8 text-center">
+
+					<h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+						Contactez-nous
+					</h1>
+
+					<p class="mt-2 text-slate-500">
+						Une question ? Envoyez-nous un message.
+					</p>
+
+				</div>
+
+
+				{# Formulaire Tailwind #}
+
+				{{ form_start(form, {
+                'attr': {
+                    'class': 'space-y-5'
+                }
+            }) }}
+
+
+				{# Nom #}
+
+				<div>
+
+					{{ form_label(form.name, 'Nom', {
+                        'label_attr': {
+                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
+                        }
+                    }) }}
+
+					{{ form_widget(form.name, {
+                        'attr': {
+                            'class': 'w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
+                        }
+                    }) }}
+
+					{{ form_errors(form.name) }}
+
+				</div>
+
+
+				{# Adresse e-mail #}
+
+				<div>
+
+					{{ form_label(form.email, 'Adresse e-mail', {
+                        'label_attr': {
+                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
+                        }
+                    }) }}
+
+					{{ form_widget(form.email, {
+                        'attr': {
+                            'class': 'w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
+                        }
+                    }) }}
+
+					{{ form_errors(form.email) }}
+
+				</div>
+
+
+				{# Message #}
+
+				<div>
+
+					{{ form_label(form.message, 'Message', {
+                        'label_attr': {
+                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
+                        }
+                    }) }}
+
+					{{ form_widget(form.message, {
+                        'attr': {
+                            'rows': 5,
+                            'class': 'w-full resize-y rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
+                        }
+                    }) }}
+
+					{{ form_errors(form.message) }}
+
+				</div>
+
+
+				{# Bouton Envoyer #}
+
+				<button type="submit" class="mt-2 flex w-full items-center justify-center gap-3 rounded-lg bg-slate-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-300">
+					Envoyer
+
+					<svg class="h-5 w-5" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L11 13"/>
+						<path d="M22 2l-7 20-4-9-9 4 20-7z"/>
+					</svg>
+
+				</button>
+
+				{{ form_end(form) }}
+
+			</section>
+
+
+			{# ================= TEXTE DROITE ================= #}
+
+			<section class="hidden self-end pb-8 xl:block">
+
+				<p class="text-sm font-medium uppercase leading-7 tracking-[0.25em] text-slate-500">
+					Des solutions<br>
+					de transport<br>
+					pour demain
+				</p>
+
+				<div class="mt-2 h-0.5 w-14 rounded-full bg-blue-500"></div>
+
+			</section>
+
+		</div>
+
 	</main>
+
 {% endblock %}
