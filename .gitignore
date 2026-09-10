@@ -32,3 +32,6 @@ Thumbs.db
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Notes de planning perso (mentor) — pas encore prêtes à partager avec la stagiaire
+/planning-perso/
