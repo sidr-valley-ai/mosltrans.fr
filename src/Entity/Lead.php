@@ -34,6 +34,9 @@ class Lead
     #[Assert\Length(min: 10, max: 255)]
     private ?string $message = null;
 
+    #[ORM\Column(length: 255)]
+    private string $status = 'nouveau';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,6 +86,18 @@ class Lead
     public function setMessage(string $message): static
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
