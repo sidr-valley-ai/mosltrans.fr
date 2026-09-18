@@ -3,13 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Lead;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 class LeadCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -34,17 +41,13 @@ class LeadCrudController extends AbstractCrudController
         ];
     }
 
-
     public function createIndexQueryBuilder(
-            \EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto $searchDto,
-            \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto $entityDto,
-            \EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection $fields,
-            \EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection $filters
-    ): \Doctrine\ORM\QueryBuilder {
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->orderBy('entity.createdAt', 'DESC');
     }
 }
-
-
-
