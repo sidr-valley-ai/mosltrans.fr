@@ -8,6 +8,9 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+# Fichier auto-généré par Symfony (config:dump-reference / IDE), régénéré à la volée
+/config/reference.php
+
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml
@@ -35,3 +38,4 @@ Thumbs.db
 
 # Notes de planning perso (mentor) — pas encore prêtes à partager avec la stagiaire
 /planning-perso/
+/config/reference.php
