@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -38,6 +39,12 @@ class LeadCrudController extends AbstractCrudController
             EmailField::new('email', 'Email'),
             DateTimeField::new('createdAt', 'Date de création'),
             TextareaField::new('message', 'Message'),
+            ChoiceField::new('status', 'Statut')->setChoices([
+                'Nouveau' => 'nouveau',
+                'En cours' => 'en_cours',
+                'Traité' => 'traite',
+                'Clos' => 'clos',
+            ]),
         ];
     }
 
