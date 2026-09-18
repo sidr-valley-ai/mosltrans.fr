@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,18 +38,23 @@ class CreateAdminCommand extends Command
 
         $emailQuestion = new Question('Email de l’administrateur : ');
         $emailQuestion->setValidator($this->validateEmail(...));
+
         $email = $helper->ask($input, $output, $emailQuestion);
 
         if ($this->userRepository->findOneBy(['email' => $email]) !== null) {
-            $io->error(sprintf('Un compte existe déjà avec l’email "%s".', $email));
+            $io->error(sprintf(
+                'Un compte existe déjà avec l’email "%s".',
+                $email
+            ));
 
             return Command::FAILURE;
         }
 
         $passwordQuestion = new Question('Mot de passe : ');
+        $passwordQuestion->setValidator($this->validatePassword(...));
         $passwordQuestion->setHidden(true);
         $passwordQuestion->setHiddenFallback(false);
-        $passwordQuestion->setValidator($this->validatePassword(...));
+
         $password = $helper->ask($input, $output, $passwordQuestion);
 
         $user = new User();
@@ -59,7 +65,17 @@ class CreateAdminCommand extends Command
         );
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
+
+        try {
+            $this->entityManager->flush();
+        } catch (UniqueConstraintViolationException) {
+            $io->error(sprintf(
+                'Un administrateur avec l’adresse %s existe déjà.',
+                $email
+            ));
+
+            return Command::FAILURE;
+        }
 
         $io->success(sprintf(
             'Administrateur %s créé avec succès.',
@@ -71,12 +87,19 @@ class CreateAdminCommand extends Command
 
     private function validateEmail(?string $email): string
     {
-        if ($email === null || trim($email) === '') {
-            throw new InvalidArgumentException('L’email ne peut pas être vide.');
+        $email = trim($email ?? '');
+
+        if ($email === '') {
+            throw new InvalidArgumentException(
+                'L’email ne peut pas être vide.'
+            );
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            throw new InvalidArgumentException(sprintf('"%s" n’est pas une adresse email valide.', $email));
+            throw new InvalidArgumentException(sprintf(
+                '"%s" n’est pas une adresse email valide.',
+                $email
+            ));
         }
 
         return $email;
@@ -84,8 +107,12 @@ class CreateAdminCommand extends Command
 
     private function validatePassword(?string $password): string
     {
-        if ($password === null || $password === '') {
-            throw new InvalidArgumentException('Le mot de passe ne peut pas être vide.');
+        $password = trim($password ?? '');
+
+        if ($password === '') {
+            throw new InvalidArgumentException(
+                'Le mot de passe ne peut pas être vide.'
+            );
         }
 
         if (mb_strlen($password) < self::MIN_PASSWORD_LENGTH) {
