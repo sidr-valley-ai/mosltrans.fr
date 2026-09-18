@@ -1,25 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Merci
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/contact.css') }}">
-{% endblock %}
+{% block title %}Merci{% endblock %}
 
 {% block body %}
-	<main class="contact-page">
-		<section class="contact-card">
-			<h1>Merci pour votre message !</h1>
+    <main class="min-h-screen flex items-center justify-center px-6 py-16">
+        <section class="w-full max-w-2xl rounded-2xl bg-white p-8 text-center shadow-xl sm:p-12">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                Merci pour votre message !
+            </h1>
 
-			<p class="contact-intro">
-				Votre demande a bien été envoyée.
-			</p>
+            <p class="mt-4 text-lg text-slate-600">
+                Votre demande a bien été envoyée.
+            </p>
 
-			<a href="{{ path('app_contact') }}" class="contact-button">
-				Retour au formulaire
-			</a>
-		</section>
-	</main>
+            <a
+                href="{{ path('app_contact') }}"
+                class="mt-8 inline-flex items-center justify-center rounded-lg bg-slate-900 px-6 py-3 font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+            >
+                Retour au formulaire
+            </a>
+        </section>
+    </main>
 {% endblock %}
