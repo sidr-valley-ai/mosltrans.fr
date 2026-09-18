@@ -10,6 +10,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: LeadRepository::class)]
 class Lead
 {
+    public const STATUSES = ['nouveau', 'en_cours', 'traite', 'clos'];
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,6 +36,10 @@ class Lead
     #[Assert\NotBlank]
     #[Assert\Length(min: 10, max: 255)]
     private ?string $message = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Choice(choices: self::STATUSES)]
+    private string $status = 'nouveau';
 
     public function getId(): ?int
     {
@@ -83,6 +90,18 @@ class Lead
     public function setMessage(string $message): static
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
