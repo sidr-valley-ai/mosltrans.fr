@@ -6,6 +6,8 @@ use App\Entity\Lead;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -32,12 +34,17 @@ class LeadCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Demandes de contact');
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions->disable(Action::NEW);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
-            DateTimeField::new('createdAt', 'Date de création'),
+            DateTimeField::new('createdAt', 'Date de création')->hideOnForm(),
             TextareaField::new('message', 'Message'),
             ChoiceField::new('status', 'Statut')->setChoices([
                 'Nouveau' => 'nouveau',
