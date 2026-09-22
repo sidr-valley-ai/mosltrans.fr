@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -39,6 +40,11 @@ class LeadCrudController extends AbstractCrudController
         return $actions->disable(Action::NEW);
     }
 
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets->addCssFile('styles/lead.css');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -46,12 +52,19 @@ class LeadCrudController extends AbstractCrudController
             EmailField::new('email', 'Email'),
             DateTimeField::new('createdAt', 'Date de création')->hideOnForm(),
             TextareaField::new('message', 'Message'),
-            ChoiceField::new('status', 'Statut')->setChoices([
-                'Nouveau' => 'nouveau',
-                'En cours' => 'en_cours',
-                'Traité' => 'traite',
-                'Clos' => 'clos',
-            ]),
+            ChoiceField::new('status', 'Statut')
+                ->setChoices([
+                    'Nouveau' => 'nouveau',
+                    'En cours' => 'en_cours',
+                    'Traité' => 'traite',
+                    'Clos' => 'clos',
+                ])
+                ->renderAsBadges([
+                    'nouveau' => 'primary',   // bleu
+                    'en_cours' => 'warning',  // orange
+                    'traite' => 'success',    // vert
+                    'clos' => 'secondary',    // gris
+                ]),
         ];
     }
 

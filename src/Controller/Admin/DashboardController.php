@@ -21,7 +21,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Mosltrans Fr');
+          ->setTitle('<img src="/images/logo-blanc.png" alt="MOSLTRANS" class="brand-logo">');
     }
 
     public function configureMenuItems(): iterable

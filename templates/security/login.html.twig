@@ -1,95 +1,139 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion administrateur{% endblock %}
+{% block title %}Connexion administrateur - MOSLTRANS{% endblock %}
 
 {% block body %}
-    <main class="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-16">
-        <section class="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl sm:p-10">
+    <main class="grid min-h-screen lg:grid-cols-2">
 
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-                Connexion
-            </h1>
+        {# ================= PANNEAU GAUCHE (portable, tablette paysage, grand écran) ================= #}
 
-            <p class="mt-2 text-gray-600">
-                Connectez-vous à votre espace administrateur.
-            </p>
+        <section class="relative hidden flex-col justify-between overflow-hidden bg-slate-600 p-12 text-white lg:flex xl:p-16">
 
-            {% if app.user %}
-                <div class="mt-6 rounded-lg bg-green-50 border border-green-200 p-4 text-sm text-green-700">
-                    Vous êtes connecté en tant que
-                    <strong>{{ app.user.userIdentifier }}</strong>.
-                    <a
-                        href="{{ logout_path() }}"
-                        class="font-semibold underline hover:no-underline"
-                    >
-                        Se déconnecter
-                    </a>
-                </div>
-            {% else %}
+            {# Filigrane : grand symbole du logo, très transparent #}
+            <img
+                src="{{ asset('images/symbole-blanc.png') }}"
+                alt=""
+                aria-hidden="true"
+                class="pointer-events-none absolute -right-24 top-1/2 h-[75%] w-auto -translate-y-1/2 select-none opacity-10"
+            >
 
-                {% if error %}
-                    <div class="mt-6 rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700">
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                {% endif %}
+            {# Logo #}
+            <a href="{{ path('app_contact') }}" class="relative">
+                <img src="{{ asset('images/logo-blanc.png') }}" alt="MOSLTRANS - Logistique et transport" class="h-20 w-auto object-contain">
+            </a>
 
-                <form method="post" class="mt-6 space-y-6">
+            {# Slogan #}
+            <div class="relative">
+                <p class="text-5xl font-light leading-tight xl:text-6xl 2xl:text-7xl">
+                    Plus loin<br>ensemble
+                </p>
+                <div class="mt-6 h-1.5 w-16 rounded-full bg-blue-400"></div>
+                <p class="mt-6 max-w-md text-lg text-slate-200 xl:text-xl">
+                    Espace réservé à l'équipe MOSLTRANS pour gérer les demandes de contact.
+                </p>
+            </div>
 
-                    <div>
-                        <label
-                            for="username"
-                            class="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                            Adresse email
-                        </label>
-
-                        <input
-                            type="email"
-                            value="{{ last_username }}"
-                            name="_username"
-                            id="username"
-                            autocomplete="email"
-                            required
-                            autofocus
-                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                    </div>
-
-                    <div>
-                        <label
-                            for="password"
-                            class="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                            Mot de passe
-                        </label>
-
-                        <input
-                            type="password"
-                            name="_password"
-                            id="password"
-                            autocomplete="current-password"
-                            required
-                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                    </div>
-
-                    <input
-                        type="hidden"
-                        name="_csrf_token"
-                        data-controller="csrf-protection"
-                        value="{{ csrf_token('authenticate') }}"
-                    >
-
-                    <button
-                        type="submit"
-                        class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
-                        Se connecter
-                    </button>
-
-                </form>
-            {% endif %}
+            <p class="relative text-sm text-slate-300">© MOSLTRANS</p>
 
         </section>
+
+        {# ================= PARTIE DROITE : CONNEXION ================= #}
+
+        <section class="flex flex-col items-center justify-center bg-slate-50 px-4 py-10 sm:px-8">
+
+            {# Logo visible seulement sur téléphone et tablette portrait #}
+            <a href="{{ path('app_contact') }}" class="mb-8 lg:hidden">
+                <img src="{{ asset('images/logo.png') }}" alt="MOSLTRANS - Logistique et transport" class="h-16 w-auto object-contain sm:h-20">
+            </a>
+
+            <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl shadow-slate-300/30 sm:p-10">
+
+                {# Icône #}
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                    <svg class="h-8 w-8 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="11" width="16" height="10" rx="2.5"/>
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                    </svg>
+                </div>
+
+                {# Titre #}
+                <div class="mb-8 text-center">
+                    <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                        Connexion
+                    </h1>
+                    <p class="mt-2 text-slate-500">
+                        Connectez-vous à votre espace administrateur.
+                    </p>
+                </div>
+
+                {% if app.user %}
+                    <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-slate-700">
+                        Vous êtes connecté en tant que
+                        <strong>{{ app.user.userIdentifier }}</strong>.
+                        <a href="{{ logout_path() }}" class="font-semibold text-blue-600 underline hover:no-underline">
+                            Se déconnecter
+                        </a>
+                    </div>
+                {% else %}
+
+                    {% if error %}
+                        <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" class="space-y-5">
+
+                        <div>
+                            <label for="username" class="mb-2 block text-sm font-semibold text-slate-800">
+                                Adresse e-mail
+                            </label>
+                            <input
+                                type="email"
+                                value="{{ last_username }}"
+                                name="_username"
+                                id="username"
+                                autocomplete="email"
+                                required
+                                autofocus
+                                class="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-800">
+                                Mot de passe
+                            </label>
+                            <input
+                                type="password"
+                                name="_password"
+                                id="password"
+                                autocomplete="current-password"
+                                required
+                                class="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                            >
+                        </div>
+
+                        <input
+                            type="hidden"
+                            name="_csrf_token"
+                            data-controller="csrf-protection"
+                            value="{{ csrf_token('authenticate') }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="mt-2 flex w-full items-center justify-center gap-3 rounded-lg bg-slate-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-300"
+                        >
+                            Se connecter
+                        </button>
+
+                    </form>
+                {% endif %}
+
+            </div>
+
+        </section>
+
     </main>
 {% endblock %}

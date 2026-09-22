@@ -1,0 +1,111 @@
+/* ===== MENU DE GAUCHE ===== */
+
+/* Fond du menu */
+.ea-sidebar {
+    background-color: #475569;
+}
+
+/* Fond du bas du menu */
+.ea-sidebar-footer {
+    background-color: #475569;
+}
+
+/* Liens et icônes du menu en blanc */
+.ea-sidebar-item-link {
+    color: white;
+}
+
+.ea-sidebar-item-icon {
+    color: white;
+}
+
+/* Lien sélectionné : fond plus foncé + barre bleue à gauche */
+.ea-sidebar-item.is-active {
+    background-color: #334155;
+    box-shadow: inset 3px 0 0 #2A78CC;
+}
+
+/* Lien survolé : fond plus foncé */
+.ea-sidebar-item:hover {
+    background-color: #334155;
+}
+
+
+/* ===== NOM "MOSLTRANS" EN HAUT DU MENU ===== */
+
+/* "MOSL" en blanc */
+.brand-mosl {
+    color: white;
+    font-weight: 700;
+}
+
+/* "TRANS" en bleu */
+.brand-trans {
+    color: #5B9FE6;
+    font-weight: 700;
+}
+
+/* "Administration" en petit gris */
+.brand-sub {
+    display: block;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+
+/* ===== BARRE DU HAUT ===== */
+
+/* Fond blanc + ligne bleue en bas */
+.content-top {
+    background-color: white;
+    border-bottom: 3px solid #2A78CC;
+}
+
+/* Barre de recherche arrondie, bleu très clair */
+.content-search .form-control {
+    background-color: #eff6ff;
+    border: none;
+    border-radius: 999px;
+}
+
+/* Logo en haut du menu */
+.brand-logo {
+    width: 100%;
+    max-width: 190px;
+}
+
+
+/* ===== MODE SOMBRE ===== (AJOUTÉ) */
+/* Ces règles s'appliquent seulement quand le mode sombre est activé */
+
+/* Menu de gauche : bleu nuit */
+.ea-dark-scheme .ea-sidebar {
+    background-color: #0f172a;
+    border-right: 1px solid #1e293b;
+}
+
+.ea-dark-scheme .ea-sidebar-footer {
+    background-color: #0f172a;
+}
+
+/* Lien sélectionné et survolé : un peu plus clair */
+.ea-dark-scheme .ea-sidebar-item.is-active {
+    background-color: #1e293b;
+}
+
+.ea-dark-scheme .ea-sidebar-item:hover {
+    background-color: #1e293b;
+}
+
+/* Barre du haut : même fond que la page (on garde la ligne bleue) */
+.ea-dark-scheme .content-top {
+    background-color: transparent;
+}
+
+/* Barre de recherche : fond sombre, texte clair */
+.ea-dark-scheme .content-search .form-control {
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
