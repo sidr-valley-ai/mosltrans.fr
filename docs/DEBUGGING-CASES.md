@@ -140,6 +140,163 @@ d'accueil). Un même symptôme peut avoir plusieurs causes distinctes selon
 le chemin qui y mène — toujours vérifier l'URL réellement atteinte et
 comment on y est arrivé, pas juste ce qui s'affiche.
 
+## Cas 5 — L'historisation ne se déclenchait que depuis EasyAdmin
+
+**Contexte :** la PR #32 ajoutait un `StatusHistorySubscriber` qui écoutait
+`BeforeEntityUpdatedEvent` d'EasyAdminBundle pour enregistrer chaque
+changement de statut dans `status_history`. En review, avant de merger, on
+s'est demandé : que se passe-t-il si le statut change **sans passer par le
+formulaire d'édition EasyAdmin** ?
+
+**Investigation :** `BeforeEntityUpdatedEvent` est un événement du *bundle*
+EasyAdmin, pas de Doctrine. Il n'est dispatché que par le contrôleur CRUD
+d'EasyAdmin, quand une sauvegarde passe par son formulaire web. Un
+changement de statut fait autrement — une commande console, un script de
+fixtures, une future route API publique, ou même un `$lead->setStatus(...)`
+suivi d'un `flush()` ailleurs dans le code — ne passe jamais par ce
+contrôleur, donc l'événement n'est jamais dispatché, et l'historique reste
+silencieusement incomplet. Pas d'erreur, pas de log : juste des trous dans
+l'audit trail, découverts uniquement le jour où on en a besoin.
+
+**Cause racine :** avoir accroché une logique métier (« toujours tracer les
+changements de statut ») à un événement de *framework d'admin* plutôt qu'à
+un événement de la *couche de persistance*. EasyAdmin n'est qu'un des
+chemins possibles pour modifier un `Lead` ; Doctrine, lui, voit *tous* les
+chemins, puisque tout finit par un `flush()`.
+
+**Correctif :** remplacer l'écoute de `BeforeEntityUpdatedEvent` (EasyAdmin)
+par l'écoute de `Events::onFlush` (Doctrine ORM), via l'attribut
+`#[AsDoctrineListener(event: Events::onFlush)]`. Voir aussi le Cas 6
+ci-dessous : le choix de l'événement Doctrine précis (`preUpdate` vs
+`onFlush`) a son propre piège.
+
+**À retenir :** quand une règle doit s'appliquer « à chaque fois que X
+change en base », se demander à quelle couche l'accrocher. Un événement de
+bundle (EasyAdmin, une future API REST, etc.) ne couvre que *son propre*
+chemin d'écriture. Un événement Doctrine (`onFlush`, `preUpdate`,
+`postPersist`...) couvre *tous* les chemins, parce qu'ils passent tous par
+l'`EntityManager`.
+
+## Cas 6 — `preUpdate` ne suffit pas pour créer une entité liée dans le même flush
+
+**Contexte :** première tentative de correctif du Cas 5, écrire un listener
+Doctrine sur `Events::preUpdate` :
+
+```php
+public function preUpdate(PreUpdateEventArgs $event): void
+{
+    // ... détecter le changement de statut ...
+    $statusHistory = new StatusHistory();
+    // ...
+    $em->persist($statusHistory);
+    $em->getUnitOfWork()->computeChangeSet(
+        $em->getClassMetadata(StatusHistory::class),
+        $statusHistory
+    );
+}
+```
+
+C'est la recette qu'on trouve dans beaucoup de tutoriels Doctrine plus
+anciens pour « créer une entité depuis un listener ».
+
+**Symptôme :** aucune erreur, aucune exception — mais un script de test
+direct (créer un `Lead`, changer son statut, `flush()`, relire la base)
+montrait `status_history` toujours vide. Le listener était bien appelé
+(vérifié avec un `error_log` temporaire dans la méthode), et
+`computeChangeSet()` ne levait rien.
+
+**Investigation :** `preUpdate` se déclenche **pendant** l'exécution des
+requêtes SQL du `flush()` (dans `executeUpdates()`), après que Doctrine a
+déjà figé la liste des entités à insérer (`entityInsertions`). Appeler
+`persist()` + `computeChangeSet()` à ce moment-là calcule bien le changeset
+de la nouvelle entité, mais ne l'ajoute pas à la liste des insertions déjà
+en cours d'exécution pour ce `flush()` — elle est donc calculée puis
+oubliée.
+
+**Cause racine :** mauvais événement pour ce besoin. `onFlush` (pas
+`preUpdate`) se déclenche **avant** que Doctrine construise ses listes
+d'insertions/mises à jour/suppressions à partir des changesets. C'est le
+seul moment du cycle de vie où persister une nouvelle entité liée est
+garanti d'être pris en compte dans le même `flush()`.
+
+**Correctif :** réécrire le listener sur `onFlush`, en itérant
+`$unitOfWork->getScheduledEntityUpdates()` pour retrouver les `Lead`
+modifiés (au lieu de recevoir une entité à la fois comme le fait
+`preUpdate`) :
+
+```php
+#[AsDoctrineListener(event: Events::onFlush)]
+class StatusHistorySubscriber
+{
+    public function onFlush(OnFlushEventArgs $event): void
+    {
+        $em = $event->getObjectManager();
+        $uow = $em->getUnitOfWork();
+
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            if (!$entity instanceof Lead) {
+                continue;
+            }
+            // ... créer StatusHistory, $em->persist(), computeChangeSet() ...
+        }
+    }
+}
+```
+
+Revalidé avec le même script de test : `status_history` contient bien une
+ligne après chaque changement de statut, y compris via un simple
+`$lead->setStatus(...); $em->flush();` en dehors de tout contrôleur admin.
+
+**À retenir :** « ça ne lève pas d'exception » ne veut pas dire « ça
+marche » — ici le code s'exécutait sans erreur mais n'écrivait rien. Pour
+une fonctionnalité invisible en base malgré un code qui semble correct,
+écrire un petit script de bout en bout (créer → modifier → relire) est plus
+fiable que de relire le code en se fiant à l'absence d'erreur. Et pour
+« créer une entité liée depuis un listener Doctrine », `onFlush` est le bon
+réflexe, pas `preUpdate` — même si d'anciens tutoriels disent le contraire.
+
+## Cas 7 — Un logo en `<img>` dans `setTitle()` rendait le tooltip vide
+
+**Symptôme :** après avoir remplacé le texte « MOSLTRANS » du logo
+EasyAdmin par une image (`Dashboard::new()->setTitle('<img src="..."
+alt="MOSLTRANS">')`), le logo s'affichait correctement, mais le tooltip
+(l'infobulle au survol du logo) avait disparu sur toutes les pages admin.
+
+**Investigation :** dans `vendor/easycorp/easyadmin-bundle/templates/
+layout.html.twig`, le titre du dashboard est utilisé deux fois à deux
+endroits différents : `{{ ea.dashboardTitle|raw }}` pour l'affichage (HTML
+brut, donc l'`<img>` s'affiche bien), et `title="{{
+ea.dashboardTitle|striptags }}"` pour le tooltip du lien — `striptags`
+retire les balises et ne garde que le texte. Un `<img alt="MOSLTRANS">` n'a
+pas de texte *entre* ses balises (l'attribut `alt` n'en est pas un pour
+`striptags`), donc le résultat est une chaîne vide.
+
+**Cause racine :** confusion entre l'attribut `alt` d'une image (utilisé
+par les lecteurs d'écran quand l'image ne se charge pas) et le texte
+« visible » qu'un filtre comme `striptags` peut extraire. Ce sont deux
+mécanismes différents.
+
+**Correctif :** ajouter du texte réel à côté de l'image, caché visuellement
+mais lisible par `striptags` (et par les lecteurs d'écran) via la classe
+utilitaire Tailwind `sr-only` :
+
+```php
+sprintf(
+    '<img src="%s" alt="" class="brand-logo"><span class="sr-only">MOSLTRANS</span>',
+    $logoUrl
+)
+```
+
+(`alt=""` sur l'image car le texte du `<span>` porte déjà l'information —
+éviter que les deux soient annoncés en double par un lecteur d'écran.)
+
+**À retenir :** quand un composant tiers (ici EasyAdmin) réutilise une même
+valeur à deux endroits avec des filtres différents (`|raw` vs
+`|striptags`), tester le rendu HTML final aux *deux* endroits, pas
+seulement celui qu'on modifie en premier. Une régression peut être
+invisible à l'écran (le logo s'affichait très bien) tout en cassant
+l'accessibilité ou l'UX ailleurs.
+
 ## Piège transverse — le serveur `php -S` garde son cache en mémoire
 
 Rencontré en corrigeant le Cas 2 : après avoir ajouté
