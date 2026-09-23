@@ -4,53 +4,46 @@ namespace App\EventSubscriber;
 
 use App\Entity\Lead;
 use App\Entity\StatusHistory;
-use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Events;
 
-class StatusHistorySubscriber implements EventSubscriberInterface
+#[AsDoctrineListener(event: Events::onFlush)]
+class StatusHistorySubscriber
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function onFlush(OnFlushEventArgs $event): void
     {
-    }
+        $entityManager = $event->getObjectManager();
+        $unitOfWork = $entityManager->getUnitOfWork();
+        $statusHistoryMetadata = $entityManager->getClassMetadata(StatusHistory::class);
 
-    public function onBeforeEntityUpdatedEvent(BeforeEntityUpdatedEvent $event): void
-    {
-        $entity = $event->getEntityInstance();
+        foreach ($unitOfWork->getScheduledEntityUpdates() as $entity) {
+            if (!$entity instanceof Lead) {
+                continue;
+            }
 
-        if (!$entity instanceof Lead) {
-            return;
+            $changeSet = $unitOfWork->getEntityChangeSet($entity);
+
+            if (!isset($changeSet['status'])) {
+                continue;
+            }
+
+            [$oldStatus, $newStatus] = $changeSet['status'];
+
+            if (!is_string($oldStatus) || !is_string($newStatus)) {
+                continue;
+            }
+
+            $statusHistory = new StatusHistory();
+            $statusHistory
+                ->setOldStatus($oldStatus)
+                ->setNewStatus($newStatus)
+                ->setChangedAt(new \DateTimeImmutable());
+
+            $entity->addStatusHistory($statusHistory);
+
+            $entityManager->persist($statusHistory);
+            $unitOfWork->computeChangeSet($statusHistoryMetadata, $statusHistory);
         }
-
-        $unitOfWork = $this->entityManager->getUnitOfWork();
-        $unitOfWork->computeChangeSets();
-
-        $changeSet = $unitOfWork->getEntityChangeSet($entity);
-
-        if (!isset($changeSet['status'])) {
-            return;
-        }
-
-        [$oldStatus, $newStatus] = $changeSet['status'];
-
-        if ($oldStatus === $newStatus) {
-            return;
-        }
-
-        $statusHistory = new StatusHistory();
-        $statusHistory
-            ->setOldStatus($oldStatus)
-            ->setNewStatus($newStatus)
-            ->setChangedAt(new \DateTimeImmutable())
-            ->setLead($entity);
-
-        $this->entityManager->persist($statusHistory);
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
-        ];
     }
 }

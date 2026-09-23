@@ -46,7 +46,7 @@ class Lead
     /**
      * @var Collection<int, StatusHistory>
      */
-    #[ORM\OneToMany(targetEntity: StatusHistory::class, mappedBy: 'lead')]
+    #[ORM\OneToMany(targetEntity: StatusHistory::class, mappedBy: 'lead', cascade: ['remove'], orphanRemoval: true)]
     private Collection $statusHistories;
 
     public function __construct()

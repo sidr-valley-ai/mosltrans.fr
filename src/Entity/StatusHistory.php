@@ -23,7 +23,7 @@ class StatusHistory
     private ?\DateTimeImmutable $changedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'statusHistories')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Lead $lead = null;
 
     public function getId(): ?int
