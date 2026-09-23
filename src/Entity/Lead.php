@@ -43,6 +43,9 @@ class Lead
     #[Assert\Choice(choices: self::STATUSES)]
     private string $status = 'nouveau';
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $followUpAt = null;
+
     /**
      * @var Collection<int, StatusHistory>
      */
@@ -115,6 +118,18 @@ class Lead
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getFollowUpAt(): ?\DateTimeImmutable
+    {
+        return $this->followUpAt;
+    }
+
+    public function setFollowUpAt(?\DateTimeImmutable $followUpAt): static
+    {
+        $this->followUpAt = $followUpAt;
 
         return $this;
     }

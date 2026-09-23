@@ -51,6 +51,7 @@ class LeadCrudController extends AbstractCrudController
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
             DateTimeField::new('createdAt', 'Date de création')->hideOnForm(),
+            DateTimeField::new('followUpAt', 'Date de relance'),
             TextareaField::new('message', 'Message'),
             ChoiceField::new('status', 'Statut')
                 ->setChoices([
