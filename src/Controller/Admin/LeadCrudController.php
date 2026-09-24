@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -37,7 +38,7 @@ class LeadCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions->disable(Action::NEW);
+        return $actions->disable(Action::NEW)->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -66,6 +67,9 @@ class LeadCrudController extends AbstractCrudController
                     'traite' => 'success',    // vert
                     'clos' => 'secondary',    // gris
                 ]),
+            Field::new('statusHistory', 'Historique des statuts')
+                ->onlyOnDetail()
+                ->setTemplatePath('admin/field/status_history.html.twig'),
         ];
     }
 
@@ -79,3 +83,6 @@ class LeadCrudController extends AbstractCrudController
             ->orderBy('entity.createdAt', 'DESC');
     }
 }
+
+
+
