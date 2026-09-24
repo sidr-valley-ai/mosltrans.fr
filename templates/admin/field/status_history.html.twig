@@ -1,0 +1,19 @@
+<div>
+    <h3 class="text-lg font-semibold mb-4">Historique des statuts</h3>
+
+    <div class="space-y-3">
+        {% for history in entity.instance.statusHistories %}
+            <div class="border-l-2 pl-4">
+                <div class="text-sm text-gray-500">
+                    {{ history.changedAt|date('d/m/Y H:i') }}
+                </div>
+                <div class="font-medium">
+                    {{ history.oldStatus }} &rarr; {{ history.newStatus }}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-sm text-gray-500">Aucun changement de statut.</p>
+        {% endfor %}
+    </div>
+</div>
+
