@@ -47,6 +47,21 @@
             "./config/routes/easyadmin.yaml"
         ]
     },
+    "phpunit/phpunit": {
+        "version": "11.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "11.1",
+            "ref": "ca0bc067abfb40a8de1b2561b96cbfc2b833c314"
+        },
+        "files": [
+            "./.env.test",
+            "./phpunit.dist.xml",
+            "./tests/bootstrap.php",
+            "./bin/phpunit"
+        ]
+    },
     "symfony/asset-mapper": {
         "version": "7.4",
         "recipe": {
@@ -117,6 +132,18 @@
             "./src/Controller/.gitignore",
             "./src/Kernel.php",
             "./.editorconfig"
+        ]
+    },
+    "symfony/mailer": {
+        "version": "7.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "09051cfde49476e3c12cd3a0e44289ace1c75a4f"
+        },
+        "files": [
+            "./config/packages/mailer.yaml"
         ]
     },
     "symfony/maker-bundle": {
