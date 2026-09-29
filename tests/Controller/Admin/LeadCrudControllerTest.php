@@ -8,10 +8,6 @@ use App\Repository\EmailHistoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\RawMessage;
 
 class LeadCrudControllerTest extends WebTestCase
 {
@@ -72,49 +68,55 @@ class LeadCrudControllerTest extends WebTestCase
 
     public function testSendEmailFailureIsReportedAndTraced(): void
     {
-        $client = static::createClient();
-        $client->disableReboot();
+        // Pointe le Mailer vers un port inatteignable pour provoquer un vrai échec
+        // d'envoi. Un double du service MailerInterface ne fonctionne pas ici : il
+        // est injecté en lazy dans LeadMailer, et le proxy lazy généré par Symfony
+        // exige une instance de la classe concrète Mailer, pas d'un simple double
+        // de l'interface.
+        $previousDsn = $_ENV['MAILER_DSN'] ?? getenv('MAILER_DSN');
+        $_ENV['MAILER_DSN'] = $_SERVER['MAILER_DSN'] = 'smtp://127.0.0.1:1';
+        putenv('MAILER_DSN=smtp://127.0.0.1:1');
 
-        static::getContainer()->set(MailerInterface::class, new class implements MailerInterface {
-            public function send(RawMessage $message, ?Envelope $envelope = null): void
-            {
-                throw new TransportException('Connection could not be established with host "smtp.example.com".');
-            }
-        });
+        try {
+            $client = static::createClient();
 
-        /** @var EntityManagerInterface $em */
-        $em = static::getContainer()->get(EntityManagerInterface::class);
+            /** @var EntityManagerInterface $em */
+            $em = static::getContainer()->get(EntityManagerInterface::class);
 
-        $admin = (new User())
-            ->setEmail(sprintf('admin-%s@example.com', uniqid()))
-            ->setRoles(['ROLE_ADMIN'])
-            ->setPassword('not-used');
+            $admin = (new User())
+                ->setEmail(sprintf('admin-%s@example.com', uniqid()))
+                ->setRoles(['ROLE_ADMIN'])
+                ->setPassword('not-used');
 
-        $lead = (new Lead())
-            ->setName('Paul Durand')
-            ->setEmail('paul.durand@example.com')
-            ->setMessage('Je souhaite un devis pour un transport.')
-            ->setCreatedAt(new \DateTimeImmutable());
+            $lead = (new Lead())
+                ->setName('Paul Durand')
+                ->setEmail('paul.durand@example.com')
+                ->setMessage('Je souhaite un devis pour un transport.')
+                ->setCreatedAt(new \DateTimeImmutable());
 
-        $em->persist($admin);
-        $em->persist($lead);
-        $em->flush();
+            $em->persist($admin);
+            $em->persist($lead);
+            $em->flush();
 
-        $client->loginUser($admin);
+            $client->loginUser($admin);
 
-        $crawler = $client->request('GET', sprintf('/admin/lead/%d', $lead->getId()));
-        $client->submit($crawler->selectButton('Envoyer un e-mail')->form());
+            $crawler = $client->request('GET', sprintf('/admin/lead/%d', $lead->getId()));
+            $client->submit($crawler->selectButton('Envoyer un e-mail')->form());
 
-        self::assertResponseRedirects(sprintf('/admin/lead/%d', $lead->getId()));
-        $client->followRedirect();
-        self::assertSelectorTextContains('body', "L'e-mail à paul.durand@example.com n'a pas pu être envoyé");
-        self::assertSelectorTextContains('body', 'Échec');
+            self::assertResponseRedirects(sprintf('/admin/lead/%d', $lead->getId()));
+            $client->followRedirect();
+            self::assertSelectorTextContains('body', "L'e-mail à paul.durand@example.com n'a pas pu être envoyé");
+            self::assertSelectorTextContains('body', 'Échec');
 
-        $history = static::getContainer()->get(EmailHistoryRepository::class)
-            ->findOneBy(['lead' => $lead->getId()]);
-        self::assertNotNull($history);
-        self::assertFalse($history->isSuccess());
-        self::assertStringContainsString('smtp.example.com', $history->getError());
+            $history = static::getContainer()->get(EmailHistoryRepository::class)
+                ->findOneBy(['lead' => $lead->getId()]);
+            self::assertNotNull($history);
+            self::assertFalse($history->isSuccess());
+            self::assertStringContainsString('127.0.0.1:1', $history->getError());
+        } finally {
+            $_ENV['MAILER_DSN'] = $_SERVER['MAILER_DSN'] = $previousDsn;
+            putenv('MAILER_DSN='.$previousDsn);
+        }
     }
 
     public function testSendEmailRequiresAdmin(): void
