@@ -4,9 +4,14 @@ namespace App\Tests\Controller\Admin;
 
 use App\Entity\Lead;
 use App\Entity\User;
+use App\Repository\EmailHistoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\RawMessage;
 
 class LeadCrudControllerTest extends WebTestCase
 {
@@ -54,6 +59,62 @@ class LeadCrudControllerTest extends WebTestCase
         self::assertEmailHtmlBodyContains($email, 'Marie Martin');
         self::assertEmailHtmlBodyContains($email, 'En cours de traitement');
         self::assertEmailHtmlBodyContains($email, '15/10/2026');
+
+        $client->followRedirect();
+        self::assertSelectorTextContains('body', 'E-mail envoyé à marie.martin@example.com');
+
+        $history = static::getContainer()->get(EmailHistoryRepository::class)
+            ->findOneBy(['lead' => $lead->getId()]);
+        self::assertNotNull($history);
+        self::assertTrue($history->isSuccess());
+        self::assertSame('Suivi de votre demande', $history->getSubject());
+    }
+
+    public function testSendEmailFailureIsReportedAndTraced(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+
+        static::getContainer()->set(MailerInterface::class, new class implements MailerInterface {
+            public function send(RawMessage $message, ?Envelope $envelope = null): void
+            {
+                throw new TransportException('Connection could not be established with host "smtp.example.com".');
+            }
+        });
+
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+
+        $admin = (new User())
+            ->setEmail(sprintf('admin-%s@example.com', uniqid()))
+            ->setRoles(['ROLE_ADMIN'])
+            ->setPassword('not-used');
+
+        $lead = (new Lead())
+            ->setName('Paul Durand')
+            ->setEmail('paul.durand@example.com')
+            ->setMessage('Je souhaite un devis pour un transport.')
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $em->persist($admin);
+        $em->persist($lead);
+        $em->flush();
+
+        $client->loginUser($admin);
+
+        $crawler = $client->request('GET', sprintf('/admin/lead/%d', $lead->getId()));
+        $client->submit($crawler->selectButton('Envoyer un e-mail')->form());
+
+        self::assertResponseRedirects(sprintf('/admin/lead/%d', $lead->getId()));
+        $client->followRedirect();
+        self::assertSelectorTextContains('body', "L'e-mail à paul.durand@example.com n'a pas pu être envoyé");
+        self::assertSelectorTextContains('body', 'Échec');
+
+        $history = static::getContainer()->get(EmailHistoryRepository::class)
+            ->findOneBy(['lead' => $lead->getId()]);
+        self::assertNotNull($history);
+        self::assertFalse($history->isSuccess());
+        self::assertStringContainsString('smtp.example.com', $history->getError());
     }
 
     public function testSendEmailRequiresAdmin(): void

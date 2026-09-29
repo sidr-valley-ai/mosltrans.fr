@@ -2,24 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Lead;
 use App\Form\LeadType;
+use App\Mailer\LeadMailer;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ContactController extends AbstractController
 {
     public function __construct(
-        private readonly MailerInterface $mailer,
-        #[Autowire(env: 'MAILER_FROM')]
-        private readonly string $mailerFrom,
+        private readonly LeadMailer $leadMailer,
     ) {
     }
 
@@ -38,7 +32,9 @@ final class ContactController extends AbstractController
             $em->persist($lead);
             $em->flush();
 
-            $this->sendConfirmationEmail($lead);
+            // La demande est enregistrée même si l'e-mail de confirmation échoue :
+            // l'échec est journalisé et visible dans l'historique du lead.
+            $this->leadMailer->sendContactConfirmation($lead);
 
             return $this->redirectToRoute('app_contact_success');
         }
@@ -46,20 +42,6 @@ final class ContactController extends AbstractController
         return $this->render('contact/index.html.twig', [
             'form' => $form,
         ]);
-    }
-
-    private function sendConfirmationEmail(Lead $lead): void
-    {
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->mailerFrom, 'MOSLTRANS'))
-            ->to($lead->getEmail())
-            ->subject('Nous avons bien reçu votre demande')
-            ->htmlTemplate('emails/contact_confirmation.html.twig')
-            ->context([
-                'lead' => $lead,
-            ]);
-
-        $this->mailer->send($email);
     }
 
     #[Route('/contact/merci', name: 'app_contact_success')]

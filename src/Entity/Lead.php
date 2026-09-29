@@ -52,9 +52,17 @@ class Lead
     #[ORM\OneToMany(targetEntity: StatusHistory::class, mappedBy: 'lead', cascade: ['remove'], orphanRemoval: true)]
     private Collection $statusHistories;
 
+    /**
+     * @var Collection<int, EmailHistory>
+     */
+    #[ORM\OneToMany(targetEntity: EmailHistory::class, mappedBy: 'lead', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['sentAt' => 'DESC'])]
+    private Collection $emailHistories;
+
     public function __construct()
     {
         $this->statusHistories = new ArrayCollection();
+        $this->emailHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,6 +166,36 @@ class Lead
             // set the owning side to null (unless already changed)
             if ($statusHistory->getLead() === $this) {
                 $statusHistory->setLead(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EmailHistory>
+     */
+    public function getEmailHistories(): Collection
+    {
+        return $this->emailHistories;
+    }
+
+    public function addEmailHistory(EmailHistory $emailHistory): static
+    {
+        if (!$this->emailHistories->contains($emailHistory)) {
+            $this->emailHistories->add($emailHistory);
+            $emailHistory->setLead($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmailHistory(EmailHistory $emailHistory): static
+    {
+        if ($this->emailHistories->removeElement($emailHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($emailHistory->getLead() === $this) {
+                $emailHistory->setLead(null);
             }
         }
 
