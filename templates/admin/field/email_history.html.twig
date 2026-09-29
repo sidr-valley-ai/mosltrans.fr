@@ -1,0 +1,26 @@
+<div>
+    <h3 class="text-lg font-semibold mb-4">Historique des e-mails</h3>
+
+    <div class="space-y-3">
+        {% for history in entity.instance.emailHistories %}
+            <div class="border-l-2 pl-4">
+                <div class="text-sm text-gray-500">
+                    {{ history.sentAt|date('d/m/Y H:i') }}
+                </div>
+                <div class="font-medium">
+                    {{ history.subject }}
+                    {% if history.success %}
+                        <span class="badge badge-success">Envoyé</span>
+                    {% else %}
+                        <span class="badge badge-danger">Échec</span>
+                    {% endif %}
+                </div>
+                {% if history.error %}
+                    <div class="text-sm text-danger">{{ history.error }}</div>
+                {% endif %}
+            </div>
+        {% else %}
+            <p class="text-sm text-gray-500">Aucun e-mail envoyé.</p>
+        {% endfor %}
+    </div>
+</div>
