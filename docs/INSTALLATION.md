@@ -1,7 +1,7 @@
 # Installation et tests en local
 
 Ce guide couvre la mise en place d'un environnement local pour lancer et tester
-le site (formulaire de contact, auth admin, back-office leads).
+le site (formulaire de contact, auth admin, back-office leads, e-mails).
 
 ## Prérequis
 
@@ -126,6 +126,60 @@ php bin/console tailwind:build --watch
 5. Changer le statut d'un lead.
 6. Se déconnecter, puis re-tenter `/admin` — doit redemander une connexion.
 
+## E-mails en développement (Mailpit)
+
+En dev, aucun e-mail ne part pour de vrai : ils sont capturés par
+[Mailpit](https://mailpit.axllent.org/), qui fait office de faux serveur SMTP.
+
+Installation (une seule fois, Windows) :
+
+```bash
+winget install axllent.mailpit
+```
+
+Dans `.env.local`, faire pointer le Mailer vers Mailpit :
+
+```bash
+MAILER_DSN=smtp://127.0.0.1:1025
+```
+
+Lancer Mailpit dans un terminal séparé (à laisser ouvert) :
+
+```bash
+mailpit
+```
+
+La boîte de réception est consultable sur `http://localhost:8025`.
+
+> En test (PHPUnit), `.env` définit `MAILER_DSN=null://null` : les e-mails sont
+> vérifiés par les assertions Mailer de Symfony, sans Mailpit.
+
+## Parcours de test manuel des e-mails (issue #38)
+
+Prérequis : Mailpit et le serveur lancés, migrations à jour.
+
+1. **Confirmation de contact** — remplir le formulaire `/contact` : un e-mail
+   « Nous avons bien reçu votre demande » arrive dans Mailpit avec le nom et
+   le message du visiteur.
+2. **Envoi depuis la fiche** — dans `/admin`, ouvrir la fiche d'un lead
+   (menu `...` → Consulter) et cliquer sur **Envoyer un e-mail** : message
+   vert, e-mail « Suivi de votre demande » dans Mailpit avec le nom, le statut
+   actuel et la date de relance du lead.
+3. **Historique** — en bas de la fiche, la section « Historique des e-mails »
+   affiche l'envoi avec la mention **Envoyé**.
+4. **Échec d'envoi** — arrêter Mailpit, recliquer sur **Envoyer un e-mail** :
+   message rouge, et une ligne **Échec** avec l'erreur dans l'historique.
+   Relancer Mailpit ensuite.
+5. **Formulaire de contact sans Mailpit** — Mailpit toujours arrêté, remplir
+   `/contact` : la page de remerciement s'affiche quand même, le lead est bien
+   enregistré, et sa fiche montre l'échec de l'e-mail de confirmation.
+
+Tests automatiques :
+
+```bash
+php bin/phpunit
+```
+
 ## Dépannage
 
 | Symptôme | Cause probable |
@@ -136,3 +190,6 @@ php bin/console tailwind:build --watch
 | `Warning: The lock file is not up to date` lors de `composer install` | Sans conséquence bloquante ; peut arriver après un merge manuel de `composer.lock` (conflit résolu à la main faute de Composer disponible). Lancer `composer update --lock` pour rafraîchir le hash si besoin |
 | Erreur 500 `Built Tailwind CSS file does not exist` | Le CSS Tailwind n'a jamais été compilé — lancer `php bin/console tailwind:build` (voir « Mise en place du projet ») |
 | Erreur 500 sur `/admin` après un `composer install`/`cache:clear`, alors que la config semble correcte | Le serveur `php -S` est un **process unique et persistant** : il garde le conteneur Symfony compilé en mémoire et ne relit pas les fichiers de `var/cache/` tant qu'il tourne. `php bin/console cache:clear` régénère bien le cache sur disque, mais il faut **arrêter puis relancer** `php -S 127.0.0.1:8080 -t public` pour que le serveur reprenne le nouveau conteneur |
+| Aucun e-mail dans Mailpit, et ligne **Échec** « Connection could not be established with host "127.0.0.1:1025" » dans l'historique | Mailpit n'est pas lancé — lancer `mailpit` dans un terminal séparé |
+| Aucun e-mail dans Mailpit, mais ligne **Envoyé** dans l'historique | `MAILER_DSN` vaut encore `null://null` (valeur de `.env`) : les e-mails sont jetés. Ajouter `MAILER_DSN=smtp://127.0.0.1:1025` dans `.env.local` |
+| Erreur `no such table: email_history` sur la fiche d'un lead | Migrations pas à jour — lancer `php bin/console doctrine:migrations:migrate` |
