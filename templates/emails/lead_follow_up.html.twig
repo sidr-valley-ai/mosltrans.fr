@@ -1,0 +1,59 @@
+{% set status_labels = {
+    'nouveau': 'Nouvelle',
+    'en_cours': 'En cours de traitement',
+    'traite': 'Traitée',
+    'clos': 'Clôturée',
+} %}
+<!DOCTYPE html>
+<html>
+    <body style="margin:0; padding:0; background-color:#f8fafc; font-family: Arial, Helvetica, sans-serif; color:#1e293b;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc; padding:32px 0;">
+            <tr>
+                <td align="center">
+                    <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:12px; padding:32px;">
+                        <tr>
+                            <td>
+                                <h1 style="margin:0 0 24px; font-size:20px; color:#0f172a;">MOSLTRANS</h1>
+
+                                <p style="margin:0 0 16px; font-size:16px; line-height:1.5;">
+                                    Bonjour {{ lead.name }},
+                                </p>
+
+                                <p style="margin:0 0 16px; font-size:16px; line-height:1.5;">
+                                    Voici le point sur la demande que vous nous avez envoyée le {{ lead.createdAt|date('d/m/Y') }}.
+                                </p>
+
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px; background-color:#f1f5f9; border-left:4px solid #3b82f6; font-size:14px; color:#334155;">
+                                    <tr>
+                                        <td style="padding:12px 16px 4px;">
+                                            <strong>Statut actuel :</strong> {{ status_labels[lead.status] ?? lead.status }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 16px 12px;">
+                                            <strong>Date de relance :</strong>
+                                            {% if lead.followUpAt %}
+                                                {{ lead.followUpAt|date('d/m/Y') }}
+                                            {% else %}
+                                                non planifiée pour le moment
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <p style="margin:0 0 16px; font-size:16px; line-height:1.5;">
+                                    Notre équipe reste à votre disposition pour toute question.
+                                </p>
+
+                                <p style="margin:0; font-size:14px; color:#64748b;">
+                                    L'équipe MOSLTRANS<br>
+                                    Plus loin, ensemble.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
