@@ -114,7 +114,7 @@ séparé pour que le CSS se recompile à chaque modification des classes :
 php bin/console tailwind:build --watch
 ```
 
-## Parcours de test manuel (issue #20)
+## Parcours de test manuel (issues #20 et #31)
 
 1. `http://127.0.0.1:8080/` — formulaire de contact, vérifier l'écriture en
    base d'un lead.
@@ -123,7 +123,16 @@ php bin/console tailwind:build --watch
 3. `http://127.0.0.1:8080/login` — connexion avec le compte créé.
 4. `http://127.0.0.1:8080/admin` — liste des leads (EasyAdmin), voir le lead
    du formulaire de contact.
-5. Changer le statut d'un lead.
+5. Changer le statut d'un lead et vérifier l'historisation (issue #31) :
+   - ouvrir un lead au statut « Nouveau » (menu `...` → Modifier), passer le
+     statut à « En cours » et renseigner une **date de relance**, enregistrer ;
+   - ouvrir sa fiche (menu `...` → Consulter) : la section « Historique des
+     statuts » affiche `nouveau → en_cours` avec la date du changement, et la
+     date de relance est bien affichée ;
+   - repasser le statut à « Traité » : une deuxième ligne `en_cours → traite`
+     s'ajoute ;
+   - modifier un autre champ (ex. le nom) sans toucher au statut : aucune
+     nouvelle ligne ne doit apparaître dans l'historique.
 6. Se déconnecter, puis re-tenter `/admin` — doit redemander une connexion.
 
 ## E-mails en développement (Mailpit)
