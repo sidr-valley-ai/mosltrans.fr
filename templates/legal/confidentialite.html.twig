@@ -1,0 +1,57 @@
+{% extends 'vitrine/layout.html.twig' %}
+
+{% block title %}Politique de confidentialité — MOSLTRANS{% endblock %}
+
+{% block body %}
+
+<!-- ============================== CONFIDENTIALITÉ ============================== -->
+  <div class="pg-head">
+    <div class="wrap">
+      <p class="crumb">ACCUEIL &nbsp;/&nbsp; CONFIDENTIALITÉ</p>
+      <h1>Politique de confidentialité</h1>
+    </div>
+  </div>
+  <div class="pg-body">
+    <div class="wrap">
+      <div class="lg-card">
+        <p class="lg-note">Document conforme au RGPD. Vérifiez la durée de conservation avec votre responsable avant publication.</p>
+
+        <h2>Responsable du traitement</h2>
+        <p>MOSLTRANS, Metz, Grand Est — contact@mosltrans.fr</p>
+
+        <h2>Données collectées</h2>
+        <p>Nous collectons uniquement les informations que vous saisissez dans nos formulaires :</p>
+        <ul>
+          <li>Formulaire de contact : nom, adresse e-mail et message</li>
+          <li>Demande de devis : coordonnées, informations sur la marchandise, lieux de départ et de destination</li>
+        </ul>
+
+        <h2>Pourquoi ces données</h2>
+        <p>Elles servent uniquement à répondre à votre demande et à établir une proposition commerciale. La base légale est votre consentement, matérialisé par l’envoi du formulaire.</p>
+
+        <h2>Durée de conservation</h2>
+        <p>Les demandes sont conservées trois ans après le dernier contact, puis supprimées.</p>
+
+        <h2>Destinataires</h2>
+        <p>Vos données sont traitées uniquement par l’équipe de MOSLTRANS. Elles ne sont ni vendues, ni louées, ni transmises à des tiers.</p>
+
+        <h2>Vos droits</h2>
+        <p>Vous disposez d’un droit d’accès, de rectification, de suppression, d’opposition et de portabilité. Pour l’exercer, écrivez à contact@mosltrans.fr. Vous pouvez également saisir la CNIL.</p>
+
+        <h2>Sécurité</h2>
+        <p>L’accès aux demandes est réservé au personnel autorisé, par un compte protégé par mot de passe. Les formulaires sont protégés contre les envois frauduleux et les données saisies sont vérifiées avant enregistrement.</p>
+
+        <h2>Suivi des envois et carte</h2>
+        <p>Le suivi d’un envoi ne demande que son numéro de suivi : aucune donnée personnelle n’est affichée, seulement les villes de départ et d’arrivée, l’étape de la livraison et la date de mise à jour.</p>
+        <p>Lorsque vous suivez un envoi, la carte du trajet est affichée à l’aide d’OpenStreetMap. Votre navigateur télécharge alors les images de la carte depuis les serveurs de la fondation OpenStreetMap, qui reçoivent votre adresse IP, comme pour tout site consulté. La carte n’est chargée qu’après une recherche : un simple passage sur le site ne contacte pas ce service. Voir la <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">politique de confidentialité d’OpenStreetMap</a>.</p>
+        <p>Les villes des envois sont placées sur la carte grâce au service de géocodage de la Géoplateforme de l’IGN. Cette opération est faite par notre serveur au moment de l’enregistrement de l’envoi : aucune donnée de visiteur n’est transmise à l’IGN.</p>
+
+        <h2>Cookies</h2>
+        <p>Ce site n’utilise aucun cookie de mesure d’audience ni de publicité. Vous pouvez à tout moment revoir vos préférences depuis le lien « Gérer mes cookies » en bas de page.</p>
+
+        <p class="lg-maj">Dernière mise à jour : octobre 2026.</p>
+        <p><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
+      </div>
+</div>
+    </div>
+  {% endblock %}

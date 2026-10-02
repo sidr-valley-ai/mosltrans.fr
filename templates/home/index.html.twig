@@ -1,0 +1,312 @@
+{% extends 'vitrine/layout.html.twig' %}
+
+{% block title %}MOSLTRANS — Transport et logistique à Metz{% endblock %}
+
+{% block body %}
+
+<!-- ============================== HERO ============================== -->
+<div class="hero" id="accueil">
+  <div class="hero-img"></div>
+  <div class="hero-veil"></div>
+
+  <div class="hero-in">
+    <div class="wrap">
+      <div class="hero-inner">
+        <img class="hero-logo" src="{{ asset('images/logo-blanc.png') }}" alt="MOSLTRANS — Logistique et transport">
+
+        <h1>Le transport de vos marchandises <em>en toute confiance</em></h1>
+
+        <p class="lead">Des solutions de transport fiables et sur mesure, adaptées à vos besoins, partout en France depuis Metz.</p>
+
+        <div class="actions">
+          <a class="btn" href="{{ path('app_devis') }}">Demander un devis →</a>
+          <a class="btn btn-ghost" href="{{ path('app_home') }}#services">Nos services</a>
+        </div>
+
+        <div class="plus">
+          <div>
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9v7H3z"/><path d="M12 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.9"/><circle cx="16.5" cy="17" r="1.9"/><path d="M1 7h2M1 10h3M1 13h2"/></svg>
+            <span>Livraison<br>partout en France</span>
+          </div>
+          <div>
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span>Suivi en temps réel<br>de vos envois</span>
+          </div>
+          <div>
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><path d="M16.5 7.2a3 3 0 0 1 0 5.6"/><path d="M18 14.2c2.2.6 3.5 2.1 3.5 4.3"/></svg>
+            <span>Une équipe<br>à votre écoute</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== SERVICES ============================== -->
+<section id="services">
+  <div class="wrap">
+    <div class="head-2 rev">
+      <div>
+        <p class="eyebrow">NOS SERVICES</p>
+        <h2>Des solutions de transport adaptées à vos besoins</h2>
+      </div>
+      <p>MOSLTRANS accompagne les entreprises pour le transport de leurs marchandises, du lot partiel au lot complet.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+        <h3>Transport national</h3>
+        <p>Lots complets ou partiels acheminés partout en France, au départ du Grand Est.</p>
+        <a class="more" data-service="national">EN SAVOIR PLUS →</a>
+      </article>
+
+      <article class="card rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span>
+        <h3>Transport express</h3>
+        <p>Enlèvement rapide et livraison en urgence quand vos délais sont serrés.</p>
+        <a class="more" data-service="express">EN SAVOIR PLUS →</a>
+      </article>
+
+      <article class="card hl rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <h3>Suivi des envois</h3>
+        <p>Suivez votre marchandise étape par étape, du chargement jusqu’à la livraison.</p>
+        <a class="more" data-service="suivi">EN SAVOIR PLUS →</a>
+      </article>
+
+      <article class="card rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M3 8l9-5 9 5-9 5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></span>
+        <h3>Transport sur mesure</h3>
+        <p>Des solutions adaptées à vos marchandises volumineuses ou spécifiques.</p>
+        <a class="more" data-service="mesure">EN SAVOIR PLUS →</a>
+      </article>
+
+      <article class="card rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Sécurité et fiabilité</h3>
+        <p>Véhicules entretenus, marchandises assurées et délais annoncés puis tenus.</p>
+        <a class="more" data-service="securite">EN SAVOIR PLUS →</a>
+      </article>
+
+      <article class="card rev">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-4.6A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg></span>
+        <h3>Accompagnement</h3>
+        <p>Un interlocuteur unique qui répond à vos questions avant, pendant et après.</p>
+        <a class="more" data-service="accompagnement">EN SAVOIR PLUS →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SUIVI ============================== -->
+<section class="suivi" id="suivi">
+  <div class="wrap">
+    <div class="suivi-grid">
+
+      <div class="rev">
+        <p class="eyebrow">SUIVI DE VOTRE LIVRAISON</p>
+        <h2>Suivez votre envoi en temps réel</h2>
+        <p class="sub">Entrez votre numéro de suivi pour connaître l’état de votre livraison.</p>
+
+        <form class="search-group" id="track-form" data-url="{{ path('app_suivi', {reference: 'REFERENCE'}) }}">
+          <svg class="loupe" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.1" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <span class="champ">
+            <input type="text" id="ref" placeholder="Exemple : MOSL-7K4P-2QX9" aria-label="Numéro de suivi" autocomplete="off" spellcheck="false" maxlength="40">
+          </span>
+          <button type="submit">Rechercher</button>
+        </form>
+        <p class="track-err" id="track-err" aria-live="polite"></p>
+
+        <div class="steps" id="steps">
+          <div class="step"><span class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Commande<br>reçue</div>
+          <div class="step"><span class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Chargement</div>
+          <div class="step"><span class="b"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h10v8H3z"/><path d="M13 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.7"/><circle cx="17" cy="17" r="1.7"/></svg></span>En transit</div>
+          <div class="step"><span class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v10"/></svg></span>Arrivée</div>
+          <div class="step"><span class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/></svg></span>Livrée</div>
+        </div>
+      </div>
+
+      <div class="map-card rev">
+        {# vraie carte (OpenStreetMap), chargée seulement après une recherche réussie #}
+        <div class="carte-reelle" id="carte-reelle" hidden></div>
+        <svg class="map" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Carte du trajet routier entre Metz et Paris">
+          <rect width="1200" height="520" fill="#f2efe9"/>
+
+          <path d="M0 0h1200v120C1000 152 840 96 620 124S170 176 0 140Z" fill="#e8efe1"/>
+          <path d="M0 396c220-34 380 42 640 10s420-62 560-30v144H0Z" fill="#e9f0e2"/>
+          <ellipse cx="220" cy="196" rx="150" ry="52" fill="#dfe9d4"/>
+          <ellipse cx="980" cy="330" rx="170" ry="60" fill="#dfe9d4"/>
+          <ellipse cx="620" cy="86" rx="130" ry="40" fill="#dfe9d4"/>
+
+          <path d="M0 318C180 300 320 344 500 332s320-72 520-62 130 18 180 12" fill="none" stroke="#bcd9ef" stroke-width="9"/>
+          <path d="M820 520c-16-94 36-158 112-208s110-116 100-192" fill="none" stroke="#bcd9ef" stroke-width="6"/>
+
+          <path d="M170 392C330 348 430 302 580 266s330-96 430-150" fill="none" stroke="#f6d78a" stroke-width="18"/>
+          <path d="M170 392C330 348 430 302 580 266s330-96 430-150" fill="none" stroke="#fff" stroke-width="11"/>
+          <path d="M0 226C240 214 500 258 740 240s330-66 460-42" fill="none" stroke="#fff" stroke-width="8" opacity=".9"/>
+          <path d="M120 520C240 400 210 300 330 224S560 84 640 0" fill="none" stroke="#fff" stroke-width="7" opacity=".75"/>
+
+          <path d="M1020 152C900 208 770 250 640 286c-150 42-260 70-420 108" fill="none" stroke="#2a78cc" stroke-width="7.5" stroke-linecap="round"/>
+
+          <circle cx="760" cy="248" r="5.5" fill="#64748b"/>
+          <text x="772" y="243" font-size="14" fill="#475569" font-family="Segoe UI, Arial">Verdun</text>
+          <circle cx="470" cy="318" r="5.5" fill="#64748b"/>
+          <text x="482" y="313" font-size="14" fill="#475569" font-family="Segoe UI, Arial">Reims</text>
+          <text x="640" y="208" font-size="13" font-weight="700" fill="#b45309" font-family="Segoe UI, Arial">A4</text>
+
+          <g transform="translate(1020,152)">
+            <path d="M0 -36C15 -36 24 -25 24 -12 24 5 0 27 0 27S-24 5-24 -12c0-13 9-24 24-24Z" fill="#2a78cc"/>
+            <circle cy="-13" r="8.5" fill="#fff"/>
+          </g>
+          <g transform="translate(200,398)">
+            <path d="M0 -36C15 -36 24 -25 24 -12 24 5 0 27 0 27S-24 5-24 -12c0-13 9-24 24-24Z" fill="#e11d48"/>
+            <circle cy="-13" r="8.5" fill="#fff"/>
+          </g>
+          <g transform="translate(628,288)">
+            <circle r="20" fill="#0b2b5e"/>
+            <g transform="translate(-11,-9) scale(0.96)" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h12v9H1z"/><path d="M13 6h5l3 3v3h-8z"/><circle cx="5" cy="14" r="1.6"/><circle cx="17" cy="14" r="1.6"/></g>
+          </g>
+
+          <rect x="980" y="120" rx="8" width="132" height="52" fill="#fff" opacity=".95"/>
+          <text x="998" y="144" font-size="18" font-weight="700" fill="#0f172a" font-family="Segoe UI, Arial">Metz</text>
+          <text x="998" y="163" font-size="13" fill="#475569" font-family="Segoe UI, Arial">Départ</text>
+
+          <rect x="86" y="388" rx="8" width="142" height="52" fill="#fff" opacity=".95"/>
+          <text x="104" y="412" font-size="18" font-weight="700" fill="#0f172a" font-family="Segoe UI, Arial">Paris</text>
+          <text x="104" y="431" font-size="13" fill="#475569" font-family="Segoe UI, Arial">Destination</text>
+
+          <g transform="translate(60,482)">
+            <rect width="90" height="3" rx="1.5" fill="#475569"/>
+            <rect y="-4" width="2" height="11" fill="#475569"/><rect x="88" y="-4" width="2" height="11" fill="#475569"/>
+            <text x="100" y="7" font-size="12.5" fill="#475569" font-family="Segoe UI, Arial">50 km</text>
+          </g>
+        </svg>
+
+        <div class="info">
+          <div class="top">
+            <span class="ref" id="map-ref">Votre envoi</span>
+            <span class="tag tag-attente" id="map-tag">En attente</span>
+          </div>
+          <div class="row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true" style="flex:0 0 auto;margin-top:2px"><path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/></svg>
+            <span><p class="k">Départ</p><p class="v" id="map-depart">—</p></span>
+          </div>
+          <div class="row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true" style="flex:0 0 auto;margin-top:2px"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+            <span><p class="k">Destination</p><p class="v" id="map-arrivee">—</p></span>
+          </div>
+          <div class="row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true" style="flex:0 0 auto;margin-top:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span><p class="k">Dernière mise à jour</p><p class="v" id="map-maj">Saisissez votre numéro</p></span>
+          </div>
+        </div>
+
+        <div class="zoom">
+          <button type="button" aria-label="Zoomer">+</button>
+          <button type="button" aria-label="Dézoomer">−</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VIDÉO ============================== -->
+<div class="video" id="plateforme">
+  <div class="video-img" aria-hidden="true">
+    <div class="slide s1 on"></div>
+    <div class="slide s2"></div>
+    <div class="slide s3"></div>
+    <div class="slide s4"></div>
+  </div>
+  <div class="video-veil"></div>
+  <div class="wrap video-in">
+    <div>
+      <span class="chip">NOTRE PLATEFORME EN VIDÉO</span>
+      <div class="rule"></div>
+      <h2 style="margin:0">Découvrez comment<br>fonctionne <em>MOSLTRANS</em></h2>
+      <p>Une plateforme simple, fiable et performante pour gérer vos transports en toute sérénité.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== À PROPOS ============================== -->
+<section id="apropos">
+  <div class="wrap">
+    <div class="about-card rev">
+      <div class="about-img" role="img" aria-label="Employé MOSLTRANS dans un entrepôt logistique"></div>
+
+      <div class="about-txt">
+        <p class="eyebrow">À PROPOS</p>
+        <h2>MOSLTRANS</h2>
+
+        <p>Basée à Metz, MOSLTRANS accompagne les entreprises du Grand Est pour le transport de leurs marchandises. Nos équipes suivent chaque envoi, du chargement à la livraison, et vous tiennent informés à chaque étape.</p>
+
+        <p>Notre objectif est simple : des délais tenus et un interlocuteur toujours joignable.</p>
+
+        <a class="btn" href="{{ path('app_contact') }}">Nous contacter →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CHIFFRES ============================== -->
+<div class="stats">
+  <div class="wrap stats-grid">
+    <div class="col"><p class="num">15</p><p class="cap">ANS D’EXPÉRIENCE</p></div>
+    <div class="col"><p class="num">24 h</p><p class="cap">POUR VOUS RÉPONDRE</p></div>
+    <div class="col"><p class="num">100 %</p><p class="cap">FRANCE</p></div>
+  </div>
+</div>
+
+<!-- ============================== TÉMOIGNAGES ============================== -->
+<section id="avis">
+  <div class="wrap">
+    <div class="avis-head rev">
+      <div>
+        <p class="eyebrow">TÉMOIGNAGES CLIENTS</p>
+        <h2 style="font-size:clamp(24px,3.2vw,34px);margin:10px 0 0">Ils nous font confiance</h2>
+      </div>
+      <div class="arrows">
+        <button class="icon-btn" id="prev" aria-label="Témoignage précédent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b2b5e" stroke-width="2.2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="icon-btn" id="next" aria-label="Témoignage suivant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b2b5e" stroke-width="2.2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+
+    <div class="avis-window">
+      <div class="avis-track" id="track">
+
+        <div class="avis-slide">
+          <article class="avis"><p class="stars" aria-label="Note : 5 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Un partenaire fiable et professionnel. Nos livraisons partent à l’heure et arrivent dans les délais annoncés.</p><div class="who"><span class="ava">TL</span><span><p class="nm">Thomas L.</p><p class="fn">Responsable logistique</p></span></div></article>
+          <article class="avis"><p class="stars" aria-label="Note : 5 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Une vraie réactivité sur les demandes urgentes, et un interlocuteur qui connaît nos dossiers.</p><div class="who"><span class="ava">SM</span><span><p class="nm">Sophie M.</p><p class="fn">Directrice d’exploitation</p></span></div></article>
+          <article class="avis"><p class="stars" aria-label="Note : 4 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Le suivi des envois nous fait gagner du temps : nous savons où se trouve la marchandise.</p><div class="who"><span class="ava">JK</span><span><p class="nm">Julien K.</p><p class="fn">Gérant</p></span></div></article>
+        </div>
+
+        <div class="avis-slide">
+          <article class="avis"><p class="stars" aria-label="Note : 5 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Des équipes disponibles et des camions toujours propres. Nos clients le remarquent aussi.</p><div class="who"><span class="ava">AD</span><span><p class="nm">Amélie D.</p><p class="fn">Responsable achats</p></span></div></article>
+          <article class="avis"><p class="stars" aria-label="Note : 5 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Devis clair, sans surprise, et une réponse rapide à chaque demande.</p><div class="who"><span class="ava">MB</span><span><p class="nm">Mehdi B.</p><p class="fn">Chef d’entreprise</p></span></div></article>
+          <article class="avis"><p class="stars" aria-label="Note : 5 sur 5"><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><svg viewBox="0 0 24 24" fill="#facc15" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z"/></svg></p><p>Un transport sur mesure organisé en deux jours pour une machine volumineuse.</p><div class="who"><span class="ava">CR</span><span><p class="nm">Claire R.</p><p class="fn">Responsable production</p></span></div></article>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
+<!-- ============================== CTA ============================== -->
+<div class="cta" id="cta">
+  <div class="cta-img"></div>
+  <div class="cta-veil"></div>
+  <div class="wrap cta-in">
+    <div>
+      <h2>Un besoin de transport ?</h2>
+      <p>Réponse sous 24 heures ouvrées — <a href="tel:+33387000000" style="color:#fff;font-weight:700">03 87 00 00 00</a></p>
+    </div>
+    <a class="btn" href="{{ path('app_devis') }}">Demander un devis →</a>
+  </div>
+</div>
+
+{% endblock %}

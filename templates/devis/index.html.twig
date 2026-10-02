@@ -1,0 +1,107 @@
+{% extends 'vitrine/layout.html.twig' %}
+
+{% block title %}Demander un devis — MOSLTRANS{% endblock %}
+
+{% block body %}
+
+<!-- ============================== PAGE DEMANDE DE DEVIS ============================== -->
+  <div class="pg-head devis">
+    <div class="wrap">
+      <p class="crumb">ACCUEIL &nbsp;/&nbsp; DEMANDE DE DEVIS</p>
+      <h1>Demander un devis</h1>
+      <p>Décrivez votre transport, nous revenons vers vous sous 24 heures ouvrées.</p>
+    </div>
+  </div>
+
+  <div class="pg-body">
+    <div class="wrap dv-grid">
+
+      <aside class="dv-aside rev">
+        <p class="eyebrow">VOTRE DEVIS</p>
+        <h2>Gratuit et sans engagement</h2>
+        <ul>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Une étude personnalisée selon votre marchandise</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Une réponse sous 24 heures ouvrées</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Un interlocuteur dédié à votre dossier</li>
+          <li style="margin-bottom:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Aucun engagement de votre part</li>
+        </ul>
+        <div class="dv-tel">
+          <p class="k">OU APPELEZ-NOUS</p>
+          <a href="tel:+33387000000">03 87 00 00 00</a>
+          <span>Lun – ven, 8h – 18h</span>
+        </div>
+      </aside>
+
+      <div class="form-card">
+        <div class="ok" id="dv-ok">
+          <span class="ok-rond"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span>
+          <span>Merci, votre demande de devis a bien été envoyée. (démonstration)</span>
+        </div>
+
+        <form id="devis-form" novalidate>
+
+          <div class="dv-sec">
+            <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M3 8l9-5 9 5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></span>
+            <h3>Marchandise</h3>
+          </div>
+          <hr class="dv-line">
+          <div class="field"><label for="dv-type">Type de marchandise</label><input type="text" id="dv-type" placeholder="Palettes, colis, matériel…"><p class="err" id="dv-type-error"></p></div>
+          <div class="g2">
+            <div class="field"><label for="dv-poids">Poids (kg)</label><input type="text" id="dv-poids" placeholder="850"><p class="err" id="dv-poids-error"></p></div>
+            <div class="field"><label for="dv-colis">Nombre de colis</label><input type="text" id="dv-colis" placeholder="4"><p class="err" id="dv-colis-error"></p></div>
+          </div>
+          <div class="g3">
+            <div class="field"><label for="dv-long">Longueur (cm)</label><input type="text" id="dv-long" placeholder="120"><p class="err" id="dv-long-error"></p></div>
+            <div class="field"><label for="dv-larg">Largeur (cm)</label><input type="text" id="dv-larg" placeholder="80"><p class="err" id="dv-larg-error"></p></div>
+            <div class="field"><label for="dv-haut">Hauteur (cm)</label><input type="text" id="dv-haut" placeholder="100"><p class="err" id="dv-haut-error"></p></div>
+          </div>
+
+          <div class="dv-sec">
+            <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/></svg></span>
+            <h3>Départ</h3>
+          </div>
+          <hr class="dv-line">
+          <div class="field"><label for="dv-adr-d">Adresse</label><input type="text" id="dv-adr-d" placeholder="12 rue des Entrepôts"><p class="err" id="dv-adr-d-error"></p></div>
+          <div class="g2">
+            <div class="field"><label for="dv-cp-d">Code postal</label><input type="text" id="dv-cp-d" placeholder="57000"><p class="err" id="dv-cp-d-error"></p></div>
+            <div class="field"><label for="dv-ville-d">Ville</label><input type="text" id="dv-ville-d" placeholder="Metz"><p class="err" id="dv-ville-d-error"></p></div>
+          </div>
+
+          <div class="dv-sec">
+            <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
+            <h3>Destination</h3>
+          </div>
+          <hr class="dv-line">
+          <div class="field"><label for="dv-adr-a">Adresse</label><input type="text" id="dv-adr-a" placeholder="5 avenue de la Gare"><p class="err" id="dv-adr-a-error"></p></div>
+          <div class="g2">
+            <div class="field"><label for="dv-cp-a">Code postal</label><input type="text" id="dv-cp-a" placeholder="75010"><p class="err" id="dv-cp-a-error"></p></div>
+            <div class="field"><label for="dv-ville-a">Ville</label><input type="text" id="dv-ville-a" placeholder="Paris"><p class="err" id="dv-ville-a-error"></p></div>
+          </div>
+
+          <div class="dv-sec">
+            <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+            <h3>Date d’enlèvement</h3>
+          </div>
+          <hr class="dv-line">
+          <div class="field"><label for="dv-date">Date souhaitée</label><input type="date" id="dv-date"><p class="err" id="dv-date-error"></p></div>
+
+          <div class="dv-sec">
+            <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            <h3>Vos coordonnées</h3>
+          </div>
+          <hr class="dv-line">
+          <div class="field"><label for="dv-nom">Nom ou entreprise</label><input type="text" id="dv-nom" placeholder="Société Dupont"><p class="err" id="dv-nom-error"></p></div>
+          <div class="g2">
+            <div class="field"><label for="dv-mail">Adresse e-mail</label><input type="email" id="dv-mail" placeholder="contact@dupont.fr"><p class="err" id="dv-mail-error"></p></div>
+            <div class="field"><label for="dv-tel">Téléphone</label><input type="tel" id="dv-tel" placeholder="06 12 34 56 78"><p class="err" id="dv-tel-error"></p></div>
+          </div>
+
+          <button type="submit" class="btn send">Envoyer ma demande de devis</button>
+          <p style="text-align:center;margin:14px 0 0;font-size:13.5px;color:var(--muted)">Ce devis est indicatif et ne constitue pas un engagement contractuel.</p>
+        </form>
+      </div>
+
+      <p class="dv-retour"><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
+</div>
+    </div>
+  {% endblock %}
