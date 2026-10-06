@@ -2,12 +2,12 @@
 
 /* Fond du menu */
 .ea-sidebar {
-    background-color: #475569;
+    background-color: #0B2B5E;
 }
 
 /* Fond du bas du menu */
 .ea-sidebar-footer {
-    background-color: #475569;
+    background-color: #0B2B5E;
 }
 
 /* Liens et icônes du menu en blanc */
@@ -21,13 +21,13 @@
 
 /* Lien sélectionné : fond plus foncé + barre bleue à gauche */
 .ea-sidebar-item.is-active {
-    background-color: #334155;
+    background-color: #071E45;
     box-shadow: inset 3px 0 0 #2A78CC;
 }
 
 /* Lien survolé : fond plus foncé */
 .ea-sidebar-item:hover {
-    background-color: #334155;
+    background-color: #071E45;
 }
 
 
@@ -41,14 +41,14 @@
 
 /* "TRANS" en bleu */
 .brand-trans {
-    color: #5B9FE6;
+    color: #93C5FD;
     font-weight: 700;
 }
 
 /* "Administration" en petit gris */
 .brand-sub {
     display: block;
-    color: #94a3b8;
+    color: #93C5FD;
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 2px;
@@ -82,21 +82,21 @@
 
 /* Menu de gauche : bleu nuit */
 .ea-dark-scheme .ea-sidebar {
-    background-color: #0f172a;
-    border-right: 1px solid #1e293b;
+    background-color: #071E45;
+    border-right: 1px solid #0B2B5E;
 }
 
 .ea-dark-scheme .ea-sidebar-footer {
-    background-color: #0f172a;
+    background-color: #071E45;
 }
 
 /* Lien sélectionné et survolé : un peu plus clair */
 .ea-dark-scheme .ea-sidebar-item.is-active {
-    background-color: #1e293b;
+    background-color: #0B2B5E;
 }
 
 .ea-dark-scheme .ea-sidebar-item:hover {
-    background-color: #1e293b;
+    background-color: #0B2B5E;
 }
 
 /* Barre du haut : même fond que la page (on garde la ligne bleue) */
@@ -108,4 +108,64 @@
 .ea-dark-scheme .content-search .form-control {
     background-color: #1e293b;
     color: #e2e8f0;
+}
+
+
+/* ===== COULEURS DU SITE SUR LES ÉLÉMENTS EASYADMIN ===== */
+
+/* Pastilles de statut : mêmes couleurs que la charte */
+.badge.badge-primary {
+    background-color: #2A78CC;
+    color: white;
+}
+
+.badge.badge-warning {
+    background-color: #F59E0B;
+    color: white;
+}
+
+.badge.badge-success {
+    background-color: #16A34A;
+    color: white;
+}
+
+.badge.badge-secondary {
+    background-color: #94A3B8;
+    color: white;
+}
+
+/* Boutons d'action principaux */
+.btn-primary,
+.action-save,
+.action-sendEmail {
+    background-color: #2A78CC;
+    border-color: #2A78CC;
+}
+
+.btn-primary:hover,
+.action-save:hover,
+.action-sendEmail:hover {
+    background-color: #1F66B4;
+    border-color: #1F66B4;
+}
+
+/* Liens dans les tableaux : bleu de la charte */
+.datagrid td a,
+.field-email a {
+    color: #2A78CC;
+}
+
+.datagrid td a:hover,
+.field-email a:hover {
+    color: #0B2B5E;
+}
+
+/* Titre de page */
+.content-header-title .title {
+    color: #0B2B5E;
+}
+
+/* Lignes du tableau survolées */
+.datagrid tbody tr:hover {
+    background-color: #F5F9FE;
 }
