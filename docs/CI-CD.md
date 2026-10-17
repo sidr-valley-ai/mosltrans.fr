@@ -16,7 +16,8 @@ flowchart LR
     B --> D{Tout est vert ?}
     C --> D
     D -- non --> E[Merge bloqué]
-    D -- oui, sur main --> F[3. Déploiement]
+    D -- oui --> M[Merge sur main]
+    M -. lancement manuel, indépendant de la CI .-> F[3. Déploiement]
     F --> G[Approbation manuelle]
     G --> H[VPS : bin/deploy.sh]
 ```
@@ -55,13 +56,14 @@ Pas de `npm audit` : le projet utilise AssetMapper (importmap), donc pas de
 > immédiatement exposé. L'action officielle exige une licence pour les
 > organisations ; on peut exécuter le binaire directement.
 
-### Constat réel au moment de l'écriture
+### Constat réel : une faille détectée, puis corrigée
 
-Le premier `composer audit` sur le projet remonte **un avis de sécurité** :
+Le premier `composer audit` sur le projet a remonté **un avis de sécurité** :
 `symfony/http-foundation` (CVE-2026-108082, ReDoS via l'en-tête `Cache-Control`),
-corrigé en 7.4.19. Le pipeline fait donc son travail dès le premier jour : tant que
-la dépendance n'est pas mise à jour (`composer update symfony/http-foundation`),
-le job `security` est rouge. C'est un bon exemple concret pour la soutenance.
+corrigé en 7.4.19. Le job `security` était donc rouge dès le premier jour. La
+dépendance a ensuite été mise à jour en 7.4.21 (commit `93912cb`) et le job est
+vert depuis. C'est un bon exemple concret pour la soutenance : le pipeline a
+détecté la faille, et sa correction l'a fait repasser au vert.
 
 ## 4. Étape 3 : déploiement (`deploy.yml`)
 
@@ -97,6 +99,11 @@ Le détail (Apache ou Nginx, HTTPS, droits, `.env.local`) est dans
 
 - Utilisateur **`deploy` non-root**, connexion SSH **par clé uniquement**
   (mot de passe désactivé), pare-feu `ufw` (ports 22, 80, 443), `fail2ban`.
+  ⚠️ En l'état, la dernière étape de `bin/deploy.sh` (`chown -R www-data:www-data var/`)
+  exige les droits root : lancée par cet utilisateur non-root, elle échoue, et le
+  script s'arrête alors que le code, les migrations et le cache sont déjà appliqués.
+  La façon de concilier les deux (droit `sudo` limité à cette commande, exécution
+  en `www-data` ou droits par groupe) reste à décider.
 - Les secrets de production restent dans `.env.local` **sur le serveur**, hors Git.
 - La base SQLite est sauvegardée avant chaque migration (par `bin/deploy.sh`) ;
   une sauvegarde quotidienne hors du serveur complète le dispositif.
@@ -110,11 +117,14 @@ Le détail (Apache ou Nginx, HTTPS, droits, `.env.local`) est dans
 | Pas d'environnement de préproduction | Un `staging` déployé à chaque merge, la prod seulement sur tag |
 | Pas de supervision | Uptime Kuma (disponibilité) et centralisation des logs |
 | Pas de conteneurs | Docker pour avoir des environnements identiques dev/CI/prod |
-| Migrations appliquées sans filet | Sauvegarde automatique de la base juste avant `migrate` |
 
 ## 7. Garde-fous : le résumé en quatre points
 
 1. **Aucun secret dans le code** : GitHub Secrets côté CI, `.env.local` côté serveur.
-2. **Rien n'est déployé sans tests ni scan verts**, ni sans approbation humaine.
+2. **Chaque PR passe par les tests et le scan, et rien n'est déployé sans action humaine** :
+   le déploiement se lance à la main et ne dépend pas encore du résultat de la CI ;
+   il déploie le dernier état de `main` (`git pull`). Vérifier que la CI de `main` est
+   verte avant de le lancer reste donc une étape manuelle ; l'automatiser est
+   l'objectif décrit en section 4.
 3. **Chaque déploiement est tracé** : un run GitHub Actions par déploiement, lié à un commit.
 4. **Sauvegarde de la base avant chaque migration**, pour pouvoir revenir en arrière.
