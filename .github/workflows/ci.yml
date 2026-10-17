@@ -1,0 +1,82 @@
+name: CI
+
+# Étapes 1 et 2 du pipeline : qualité + tests, puis scan des dépendances.
+# Voir docs/CI-CD.md.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Scan hebdomadaire : une faille peut être publiée sans qu'on ait touché au code
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Qualité & tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+    env:
+      APP_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, intl, pdo_sqlite, sqlite3, ctype, iconv
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Lint Twig / YAML / conteneur
+        run: |
+          php bin/console lint:twig templates
+          php bin/console lint:yaml config
+          php bin/console lint:container
+
+      - name: Créer la base de test (migrations)
+        run: php bin/console doctrine:migrations:migrate --no-interaction
+
+      # Les templates référencent le CSS Tailwind : sans build, le rendu des pages
+      # lève une erreur 500 (binaire Tailwind téléchargé dans var/tailwind).
+      - name: Compiler Tailwind
+        run: php bin/console tailwind:build
+
+      - name: PHPUnit
+        run: php bin/phpunit
+
+  security:
+    name: Scan des dépendances
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      # Interroge les avis de sécurité (Packagist / FriendsOfPHP) pour chaque
+      # version figée dans composer.lock. Code retour != 0 si une faille est connue.
+      - name: composer audit
+        run: composer audit --locked
