@@ -105,6 +105,8 @@ Voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md) : prérequis, installation
 PHP/Composer (Windows), mise en place du projet, lancement du serveur et
 parcours de test manuel du back-office.
 
+Pour la mise en production, voir [`docs/DEPLOIEMENT.md`](docs/DEPLOIEMENT.md).
+
 ## Documentation
 
 - [Cycle de vie du développement logiciel (SDLC)](https://claude.ai/code/artifact/3a4456c4-9867-4636-be88-1163ea4f0c43) — guide de formation pour la stagiaire : phases du SDLC, modèles (cascade/Scrum/Kanban/DevOps), bonnes pratiques et ressources.
