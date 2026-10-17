@@ -201,7 +201,8 @@ server {
     }
 
     location ~ ^/index\.php(/|$) {
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        # adapter au numéro de version de PHP installé sur le serveur
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
@@ -257,8 +258,6 @@ certbot renew --dry-run
 
 ```bash
 cd /var/www/mosltrans
-php bin/console app:maintenance on        # si une page de maintenance existe
-
 git pull origin main
 composer install --no-dev --optimize-autoloader
 php bin/console doctrine:migrations:migrate --no-interaction --env=prod
@@ -266,7 +265,6 @@ php bin/console tailwind:build --minify --env=prod
 php bin/console asset-map:compile --env=prod
 php bin/console cache:clear --env=prod
 
-php bin/console app:maintenance off
 ```
 
 **Sauvegarder la base avant toute migration** :
@@ -344,6 +342,10 @@ composer install --no-dev --optimize-autoloader
 cp var/sauvegardes/data-<horodatage>.db var/data.db
 php bin/console cache:clear --env=prod
 ```
+
+Une fois le correctif poussé sur `main`, **revenir sur la branche** avec
+`git checkout main` : tant que le dépôt est en « detached HEAD », le `git pull`
+de `bin/deploy.sh` ne fonctionne pas.
 
 ---
 
