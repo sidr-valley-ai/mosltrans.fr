@@ -1,7 +1,7 @@
 name: CI
 
 # Étapes 1 et 2 du pipeline : qualité + tests, puis scan des dépendances.
-# Voir docs/DEPLOIEMENT.md.
+# Voir docs/CI-CD.md.
 on:
   pull_request:
   push:

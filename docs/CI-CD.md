@@ -1,4 +1,4 @@
-# Plan de déploiement : pipeline CI/CD
+# Pipeline CI/CD
 
 Plan **théorique et volontairement simple** pour mettre mosltrans.fr en production.
 Il tient en trois mots : **tester → sécuriser → livrer**.
@@ -18,7 +18,7 @@ flowchart LR
     D -- non --> E[Merge bloqué]
     D -- oui, sur main --> F[3. Déploiement]
     F --> G[Approbation manuelle]
-    G --> H[VPS : nouvelle release]
+    G --> H[VPS : bin/deploy.sh]
 ```
 
 Outil : **GitHub Actions**. Le dépôt est déjà sur GitHub, donc aucune infrastructure
@@ -63,7 +63,12 @@ corrigé en 7.4.19. Le pipeline fait donc son travail dès le premier jour : tan
 la dépendance n'est pas mise à jour (`composer update symfony/http-foundation`),
 le job `security` est rouge. C'est un bon exemple concret pour la soutenance.
 
-## 4. Étape 3 : déploiement (`deploy.yml` + `docs/deploy/deploy.sh`)
+## 4. Étape 3 : déploiement (`deploy.yml`)
+
+La procédure de déploiement elle-même (prérequis serveur, `.env.local` de
+production, serveur web, HTTPS, vérifications, retour arrière) est décrite dans
+[`DEPLOIEMENT.md`](DEPLOIEMENT.md), et automatisée par [`bin/deploy.sh`](../bin/deploy.sh).
+Le pipeline ne réinvente rien : il **déclenche ce même script**, à distance.
 
 Déclencheur cible : push sur `main` **après** réussite des étapes 1 et 2.
 
@@ -71,27 +76,11 @@ Déclencheur cible : push sur `main` **après** réussite des étapes 1 et 2.
    configuré avec un relecteur obligatoire. Rien ne part en prod sans clic humain.
 2. **Connexion SSH** au VPS avec une clé **dédiée au déploiement**, stockée dans les
    *GitHub Secrets* (jamais dans le dépôt).
-3. **Script `deploy.sh` sur le serveur** :
-   - clone la version exacte (le SHA du commit validé) dans `releases/<date>-<sha>` ;
-   - `composer install --no-dev --optimize-autoloader` ;
-   - build des assets (`tailwind:build`, `asset-map:compile`) ;
-   - `doctrine:migrations:migrate` ;
-   - `cache:clear`, puis **bascule atomique** du lien `current` vers la nouvelle release ;
-   - recharge PHP-FPM ; conserve les 5 dernières releases.
-4. **Retour arrière** : repointer `current` vers la release précédente
-   (`ln -sfn releases/<précédente> current` + reload PHP-FPM). Quelques secondes,
-   sans rebuild.
-
-Arborescence sur le VPS :
-
-```
-/var/www/mosltrans/
-├── releases/20261020103000-ab12cd3/   # une release par déploiement
-├── shared/
-│   ├── .env.local                     # secrets de prod, hors Git
-│   └── var/                           # base de données et logs persistants
-└── current -> releases/20261020103000-ab12cd3
-```
+3. **Exécution de `bin/deploy.sh` sur le serveur** : sauvegarde de la base SQLite,
+   `git pull`, `composer install --no-dev`, migrations, build des assets, cache, droits.
+4. **Retour arrière** : voir la section « Revenir à la version précédente » de
+   [`DEPLOIEMENT.md`](DEPLOIEMENT.md) (checkout du dernier commit stable et
+   restauration de la sauvegarde de la base prise juste avant la migration).
 
 ### Secrets à créer (Settings > Environments > production)
 
@@ -103,18 +92,21 @@ Arborescence sur le VPS :
 
 ## 5. Architecture du VPS
 
-- **Nginx** en frontal, HTTPS via **Let's Encrypt** (certbot, renouvellement automatique).
-- **PHP-FPM** pour exécuter Symfony ; la racine web pointe sur `current/public`.
+Le détail (Apache ou Nginx, HTTPS, droits, `.env.local`) est dans
+[`DEPLOIEMENT.md`](DEPLOIEMENT.md). Pour le pipeline, trois points comptent :
+
 - Utilisateur **`deploy` non-root**, connexion SSH **par clé uniquement**
   (mot de passe désactivé), pare-feu `ufw` (ports 22, 80, 443), `fail2ban`.
-- Sauvegarde quotidienne de la base et de `shared/`, stockée hors du serveur.
-- Variables de production dans `shared/.env.local`, avec un `APP_SECRET` propre à la prod.
+- Les secrets de production restent dans `.env.local` **sur le serveur**, hors Git.
+- La base SQLite est sauvegardée avant chaque migration (par `bin/deploy.sh`) ;
+  une sauvegarde quotidienne hors du serveur complète le dispositif.
 
 ## 6. Limites et évolutions (à dire à l'oral)
 
 | Limite actuelle | Évolution possible |
 |---|---|
 | SQLite : un seul fichier, pas de montée en charge | MariaDB ou PostgreSQL en production |
+| Déploiement en place (`git pull`), sans releases versionnées | Releases datées avec bascule atomique d'un lien `current` : retour arrière en quelques secondes |
 | Pas d'environnement de préproduction | Un `staging` déployé à chaque merge, la prod seulement sur tag |
 | Pas de supervision | Uptime Kuma (disponibilité) et centralisation des logs |
 | Pas de conteneurs | Docker pour avoir des environnements identiques dev/CI/prod |
@@ -124,5 +116,5 @@ Arborescence sur le VPS :
 
 1. **Aucun secret dans le code** : GitHub Secrets côté CI, `.env.local` côté serveur.
 2. **Rien n'est déployé sans tests ni scan verts**, ni sans approbation humaine.
-3. **Chaque déploiement est tracé** : un SHA de commit, une release datée.
-4. **Retour arrière en quelques secondes**, sans reconstruire.
+3. **Chaque déploiement est tracé** : un run GitHub Actions par déploiement, lié à un commit.
+4. **Sauvegarde de la base avant chaque migration**, pour pouvoir revenir en arrière.

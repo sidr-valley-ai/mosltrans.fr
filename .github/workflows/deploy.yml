@@ -1,6 +1,6 @@
 name: Deploy
 
-# Étape 3 du pipeline : déploiement sur le VPS (modèle, voir docs/DEPLOIEMENT.md).
+# Étape 3 du pipeline : déploiement sur le VPS (modèle, voir docs/CI-CD.md).
 # Déclenchement MANUEL tant qu'aucun VPS n'est configuré. Pour passer en continu,
 # remplacer `workflow_dispatch` par un déclencheur `workflow_run` sur le workflow
 # "CI" (branche main, conclusion success).
@@ -33,4 +33,4 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_deploy \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "bash /var/www/mosltrans/deploy.sh ${{ github.sha }}"
+            "cd /var/www/mosltrans && ./bin/deploy.sh"
