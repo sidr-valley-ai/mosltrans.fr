@@ -34,7 +34,9 @@ class Geocodeur
         try {
             $reponse = $this->httpClient->request('GET', self::URL, [
                 'query' => ['q' => $ville, 'type' => 'municipality', 'limit' => 1],
+                // timeout = inactivité maximale ; max_duration borne la durée totale de l'appel
                 'timeout' => 5,
+                'max_duration' => 5,
             ]);
             $donnees = $reponse->toArray();
         } catch (ExceptionInterface $e) {

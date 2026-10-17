@@ -95,6 +95,71 @@ class EnvoiCrudControllerTest extends WebTestCase
         self::assertGreaterThan($miseAJourInitiale, new \DateTimeImmutable($donnees['misAJourLe']));
     }
 
+    public function testChangerSeulementLEtapeNeRelocalisePasLesVilles(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+
+        // villes déjà placées : aucun appel à l'IGN, et les coordonnées sont conservées même si le service est en panne
+        $geocodeur = $this->createMock(Geocodeur::class);
+        $geocodeur->expects(self::never())->method('localiserVille');
+        static::getContainer()->set(Geocodeur::class, $geocodeur);
+
+        $envoi = $this->creerEnvoiLocalise();
+
+        $client->loginUser($this->creerAdmin());
+        $crawler = $client->request('GET', sprintf('/admin/envoi/%d/edit', $envoi->getId()));
+        $client->submit($crawler->filter('form[name="Envoi"]')->form(['Envoi[etape]' => 'livree']));
+        self::assertResponseRedirects();
+
+        $envoi = static::getContainer()->get(EnvoiRepository::class)->find($envoi->getId());
+        self::assertSame('livree', $envoi->getEtape());
+        self::assertSame('Metz (57)', $envoi->getVilleDepart());
+        self::assertEqualsWithDelta(49.108385, $envoi->getLatitudeDepart(), 0.000001);
+        self::assertEqualsWithDelta(48.859, $envoi->getLatitudeArrivee(), 0.000001);
+    }
+
+    public function testChangerUneVilleNeRelocaliseQueCetteVille(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+
+        $geocodeur = $this->createMock(Geocodeur::class);
+        $geocodeur->expects(self::once())->method('localiserVille')->with('lyon')
+            ->willReturn(['latitude' => 45.758, 'longitude' => 4.835, 'libelle' => 'Lyon (69)']);
+        static::getContainer()->set(Geocodeur::class, $geocodeur);
+
+        $envoi = $this->creerEnvoiLocalise();
+
+        $client->loginUser($this->creerAdmin());
+        $crawler = $client->request('GET', sprintf('/admin/envoi/%d/edit', $envoi->getId()));
+        $client->submit($crawler->filter('form[name="Envoi"]')->form(['Envoi[villeArrivee]' => 'lyon']));
+        self::assertResponseRedirects();
+
+        $envoi = static::getContainer()->get(EnvoiRepository::class)->find($envoi->getId());
+        self::assertSame('Lyon (69)', $envoi->getVilleArrivee());
+        self::assertEqualsWithDelta(45.758, $envoi->getLatitudeArrivee(), 0.000001);
+        self::assertSame('Metz (57)', $envoi->getVilleDepart());
+        self::assertEqualsWithDelta(49.108385, $envoi->getLatitudeDepart(), 0.000001);
+    }
+
+    private function creerEnvoiLocalise(): Envoi
+    {
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+
+        $envoi = (new Envoi())
+            ->setVilleDepart('Metz (57)')
+            ->setVilleArrivee('Paris (75)')
+            ->setCoordonneesDepart(49.108385, 6.194891)
+            ->setCoordonneesArrivee(48.859, 2.347)
+            ->setEtape('en_transit');
+        $em->persist($envoi);
+        $em->flush();
+
+        return $envoi;
+    }
+
     private function creerAdmin(): User
     {
         /** @var EntityManagerInterface $em */

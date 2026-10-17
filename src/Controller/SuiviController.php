@@ -6,7 +6,9 @@ use App\Entity\Envoi;
 use App\Repository\EnvoiRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class SuiviController extends AbstractController
@@ -16,8 +18,17 @@ final class SuiviController extends AbstractController
      * Ne renvoie que des informations non personnelles : numéro, villes, étape et date.
      */
     #[Route('/suivi/{reference}', name: 'app_suivi', methods: ['GET'], requirements: ['reference' => '[A-Za-z0-9 -]{1,40}'])]
-    public function suivi(string $reference, EnvoiRepository $envoiRepository): JsonResponse
+    public function suivi(string $reference, Request $request, EnvoiRepository $envoiRepository, RateLimiterFactoryInterface $suiviLimiter): JsonResponse
     {
+        // limite par IP (config/packages/rate_limiter.yaml) : empêche de tester des numéros en masse
+        $limite = $suiviLimiter->create($request->getClientIp())->consume();
+        if (!$limite->isAccepted()) {
+            $reponse = $this->reponse(['erreur' => 'Trop de recherches en peu de temps. Réessayez dans une minute.'], Response::HTTP_TOO_MANY_REQUESTS);
+            $reponse->headers->set('Retry-After', (string) max(1, $limite->getRetryAfter()->getTimestamp() - time()));
+
+            return $reponse;
+        }
+
         $envoi = $envoiRepository->findOneByReference($reference);
 
         if (null === $envoi) {

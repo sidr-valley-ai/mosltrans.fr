@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\Envoi;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 
 class SuiviControllerTest extends WebTestCase
 {
@@ -66,6 +67,31 @@ class SuiviControllerTest extends WebTestCase
         $client->request('GET', '/suivi/'.rawurlencode('<script>'));
 
         self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testTropDeRecherchesDepuisLaMemeAdresseSontLimitees(): void
+    {
+        $client = static::createClient();
+
+        // adresse dédiée à ce test, remise à zéro : indépendant des autres tests et des exécutions précédentes
+        $ip = '203.0.113.10';
+        /** @var RateLimiterFactoryInterface $limiteur */
+        $limiteur = static::getContainer()->get('limiter.suivi');
+        $limiteur->create($ip)->reset();
+
+        // un usage normal (20 recherches par minute) n'est jamais bloqué
+        for ($i = 0; $i < 20; ++$i) {
+            $client->request('GET', '/suivi/MOSL-AAAA-ZZZZ', server: ['REMOTE_ADDR' => $ip]);
+            self::assertResponseStatusCodeSame(404);
+        }
+
+        $client->request('GET', '/suivi/MOSL-AAAA-ZZZZ', server: ['REMOTE_ADDR' => $ip]);
+
+        self::assertResponseStatusCodeSame(429);
+        self::assertResponseHasHeader('Retry-After');
+        self::assertResponseHeaderSame('Cache-Control', 'no-store, private');
+        $donnees = json_decode((string) $client->getResponse()->getContent(), true);
+        self::assertSame('Trop de recherches en peu de temps. Réessayez dans une minute.', $donnees['erreur']);
     }
 
     public function testLeNumeroDeSuiviEstGenereAutomatiquementEtUnique(): void

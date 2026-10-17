@@ -11,7 +11,11 @@ le site (formulaire de contact, auth admin, back-office leads, e-mails).
   `fileinfo`, `curl`, `zip`
 
 Le projet utilise SQLite (fichier unique, pas de serveur DB à installer) et
-Tailwind via AssetMapper (pas de Node/npm requis).
+Tailwind via AssetMapper (pas de Node/npm requis). Les bibliothèques
+JavaScript/CSS tierces (Leaflet pour la carte du suivi) sont déclarées dans
+`importmap.php` et téléchargées dans `assets/vendor/`, qui n'est **pas
+versionné** : un accès réseau à `cdn.jsdelivr.net` est nécessaire à
+l'installation.
 
 ## Installation de PHP + Composer sur Windows
 
@@ -71,6 +75,21 @@ dans un terminal fraîchement ouvert avant d'aller plus loin.
 ```bash
 composer install
 ```
+
+Télécharger les paquets front déclarés dans `importmap.php` (Leaflet) vers
+`assets/vendor/` :
+
+```bash
+php bin/console importmap:install
+```
+
+> `composer install` lance déjà cette commande automatiquement (scripts
+> `auto-scripts` de `composer.json`). La relancer à la main est nécessaire si
+> `composer install` a été exécuté avec `--no-scripts`, si le téléchargement a
+> échoué (pas d'accès réseau au CDN), ou après un `git pull` / changement de
+> branche qui modifie `importmap.php`. Elle doit être lancée **après**
+> `composer install` (la console Symfony a besoin de `vendor/`) et **avant**
+> de lancer le serveur. Sans effet si tout est déjà téléchargé.
 
 Générer un secret local (`.env.local` n'est pas versionné) :
 
@@ -188,6 +207,7 @@ php bin/phpunit
 | `composer: command not found` dans Git Bash alors que `composer.bat` existe | Git Bash ne résout pas les extensions `.bat`/`.cmd` comme Windows — utiliser le wrapper `composer` sans extension |
 | `Unable to load dynamic library 'xxx'` au démarrage de PHP | `extension_dir` du `php.ini` pointe vers un chemin qui n'existe pas (souvent `C:\php\ext` par défaut) — le corriger vers le dossier `ext` réel |
 | `Warning: The lock file is not up to date` lors de `composer install` | Sans conséquence bloquante ; peut arriver après un merge manuel de `composer.lock` (conflit résolu à la main faute de Composer disponible). Lancer `composer update --lock` pour rafraîchir le hash si besoin |
+| Erreur 500 `The "leaflet" vendor asset is missing` | Le dossier `assets/vendor/` (non versionné) est vide ou incomplet — lancer `php bin/console importmap:install` (voir « Mise en place du projet ») |
 | Erreur 500 `Built Tailwind CSS file does not exist` | Le CSS Tailwind n'a jamais été compilé — lancer `php bin/console tailwind:build` (voir « Mise en place du projet ») |
 | Erreur 500 sur `/admin` après un `composer install`/`cache:clear`, alors que la config semble correcte | Le serveur `php -S` est un **process unique et persistant** : il garde le conteneur Symfony compilé en mémoire et ne relit pas les fichiers de `var/cache/` tant qu'il tourne. `php bin/console cache:clear` régénère bien le cache sur disque, mais il faut **arrêter puis relancer** `php -S 127.0.0.1:8080 -t public` pour que le serveur reprenne le nouveau conteneur |
 | Aucun e-mail dans Mailpit, et ligne **Échec** « Connection could not be established with host "127.0.0.1:1025" » dans l'historique | Mailpit n'est pas lancé — lancer `mailpit` dans un terminal séparé |

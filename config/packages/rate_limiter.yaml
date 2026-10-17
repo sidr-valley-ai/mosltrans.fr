@@ -1,0 +1,8 @@
+framework:
+    rate_limiter:
+        # API publique de suivi (/suivi/{reference}) : limite par adresse IP pour freiner
+        # l'énumération des numéros de suivi, sans gêner un client qui vérifie son envoi
+        suivi:
+            policy: sliding_window
+            limit: 20
+            interval: '1 minute'

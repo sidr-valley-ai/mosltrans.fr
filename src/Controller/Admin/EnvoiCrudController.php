@@ -81,29 +81,41 @@ class EnvoiCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $this->localiser($entityInstance);
+        $avant = $entityManager->getUnitOfWork()->getOriginalEntityData($entityInstance);
+        $this->localiser($entityInstance, $avant['villeDepart'] ?? null, $avant['villeArrivee'] ?? null);
         parent::updateEntity($entityManager, $entityInstance);
     }
 
-    /** Place les deux villes sur la carte et harmonise leur nom, par exemple « metz » devient « Metz (57) ». */
-    private function localiser(Envoi $envoi): void
+    /**
+     * Place les deux villes sur la carte et harmonise leur nom, par exemple « metz » devient « Metz (57) ».
+     * Une ville inchangée et déjà placée n'est pas relocalisée : changer l'étape n'appelle pas l'IGN.
+     */
+    private function localiser(Envoi $envoi, ?string $ancienDepart = null, ?string $ancienneArrivee = null): void
     {
-        $depart = $this->geocodeur->localiserVille((string) $envoi->getVilleDepart());
-        $arrivee = $this->geocodeur->localiserVille((string) $envoi->getVilleArrivee());
+        $departTrouve = true;
+        $arriveeTrouvee = true;
 
-        if (null !== $depart) {
-            $envoi->setVilleDepart($depart['libelle'])->setCoordonneesDepart($depart['latitude'], $depart['longitude']);
-        } else {
-            $envoi->setCoordonneesDepart(null, null);
+        if ($envoi->getVilleDepart() !== $ancienDepart || null === $envoi->getLatitudeDepart()) {
+            $depart = $this->geocodeur->localiserVille((string) $envoi->getVilleDepart());
+            if (null !== $depart) {
+                $envoi->setVilleDepart($depart['libelle'])->setCoordonneesDepart($depart['latitude'], $depart['longitude']);
+            } else {
+                $envoi->setCoordonneesDepart(null, null);
+                $departTrouve = false;
+            }
         }
 
-        if (null !== $arrivee) {
-            $envoi->setVilleArrivee($arrivee['libelle'])->setCoordonneesArrivee($arrivee['latitude'], $arrivee['longitude']);
-        } else {
-            $envoi->setCoordonneesArrivee(null, null);
+        if ($envoi->getVilleArrivee() !== $ancienneArrivee || null === $envoi->getLatitudeArrivee()) {
+            $arrivee = $this->geocodeur->localiserVille((string) $envoi->getVilleArrivee());
+            if (null !== $arrivee) {
+                $envoi->setVilleArrivee($arrivee['libelle'])->setCoordonneesArrivee($arrivee['latitude'], $arrivee['longitude']);
+            } else {
+                $envoi->setCoordonneesArrivee(null, null);
+                $arriveeTrouvee = false;
+            }
         }
 
-        if (null === $depart || null === $arrivee) {
+        if (!$departTrouve || !$arriveeTrouvee) {
             $this->addFlash('warning', 'Une des villes n\'a pas été trouvée : l\'envoi est enregistré, mais la carte ne pourra pas afficher le trajet. Vérifiez l\'orthographe de la ville.');
         }
     }
