@@ -377,14 +377,18 @@
   var form = document.getElementById('track-form');
   var carteDessin = document.querySelector('.map-card svg.map');
   var carteReelle = document.getElementById('carte-reelle');
+  var carteIndisponible = document.getElementById('carte-indisponible');
   var boutonsZoom = document.querySelectorAll('.map-card .zoom button');
   var L = null, carteLeaflet = null, calqueTrajet = null;
+  var sansTrajet = false;   // envoi trouvé, mais une ville n'a pas pu être placée sur la carte
 
   // zoom : agit sur la vraie carte si elle est affichée, sinon sur le dessin
   var echelle = 1, ZOOM_MIN = 1, ZOOM_MAX = 2.5, ZOOM_PAS = 0.5;
   function majBoutonsZoom() {
     if (boutonsZoom.length !== 2) return;
-    if (carteLeaflet) {
+    if (sansTrajet) {
+      boutonsZoom[0].disabled = boutonsZoom[1].disabled = true;
+    } else if (carteLeaflet) {
       boutonsZoom[0].disabled = carteLeaflet.getZoom() >= carteLeaflet.getMaxZoom();
       boutonsZoom[1].disabled = carteLeaflet.getZoom() <= carteLeaflet.getMinZoom();
     } else {
@@ -393,6 +397,7 @@
     }
   }
   function zoomer(sens) {
+    if (sansTrajet) return;
     if (carteLeaflet) { if (sens > 0) { carteLeaflet.zoomIn(); } else { carteLeaflet.zoomOut(); } return; }
     echelle = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, echelle + sens * ZOOM_PAS));
     carteDessin.style.transform = 'scale(' + echelle + ')';
@@ -422,18 +427,34 @@
     }).bindTooltip(ville.ville, { permanent: true, direction: 'top', offset: [0, -12], className: 'repere-nom' });
   }
 
+  // envoi sans coordonnées : le dessin d'illustration ferait croire à un trajet, on le remplace par un message
+  function signalerSansTrajet(actif) {
+    sansTrajet = actif;
+    if (carteIndisponible) {
+      carteIndisponible.hidden = !actif;
+      carteIndisponible.parentNode.classList.toggle('sans-trajet', actif);
+    }
+    if (carteDessin && actif) carteDessin.style.visibility = 'hidden';
+    majBoutonsZoom();
+  }
+
   function masquerCarte() {
     if (carteReelle) { carteReelle.hidden = true; carteReelle.parentNode.classList.remove('carte-active'); }
     if (carteDessin) carteDessin.style.visibility = '';
     if (carteLeaflet) { carteLeaflet.remove(); carteLeaflet = null; calqueTrajet = null; }
-    majBoutonsZoom();
+    signalerSansTrajet(false);
   }
 
   function afficherCarte(depart, arrivee) {
     var localisable = depart.latitude !== null && arrivee.latitude !== null;
-    if (!carteReelle || !localisable) { masquerCarte(); return Promise.resolve(false); }
+    if (!carteReelle || !localisable) {
+      masquerCarte();
+      if (!localisable) signalerSansTrajet(true);
+      return Promise.resolve(false);
+    }
 
     return chargerLeaflet().then(function () {
+      signalerSansTrajet(false);
       carteReelle.hidden = false;
       carteReelle.parentNode.classList.add('carte-active');   // la carte s'agrandit pour montrer le trajet sous l'encadré
       if (carteDessin) carteDessin.style.visibility = 'hidden';

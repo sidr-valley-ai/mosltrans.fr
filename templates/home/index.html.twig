@@ -130,7 +130,7 @@
       <div class="map-card rev">
         {# vraie carte (OpenStreetMap), chargée seulement après une recherche réussie #}
         <div class="carte-reelle" id="carte-reelle" hidden></div>
-        <svg class="map" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Carte du trajet routier entre Metz et Paris">
+        <svg class="map" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration d’un trajet routier (exemple)">
           <rect width="1200" height="520" fill="#f2efe9"/>
 
           <path d="M0 0h1200v120C1000 152 840 96 620 124S170 176 0 140Z" fill="#e8efe1"/>
@@ -201,6 +201,9 @@
             <span><p class="k">Dernière mise à jour</p><p class="v" id="map-maj">Saisissez votre numéro</p></span>
           </div>
         </div>
+
+        {# message affiché à la place du dessin quand une ville de l'envoi n'a pas pu être placée sur la carte #}
+        <p class="carte-indisponible" id="carte-indisponible" hidden>Le trajet de cet envoi n’est pas disponible sur la carte.</p>
 
         <div class="zoom">
           <button type="button" aria-label="Zoomer">+</button>
