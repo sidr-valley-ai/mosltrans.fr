@@ -1,0 +1,36 @@
+name: Deploy
+
+# Étape 3 du pipeline : déploiement sur le VPS (modèle, voir docs/DEPLOIEMENT.md).
+# Déclenchement MANUEL tant qu'aucun VPS n'est configuré. Pour passer en continu,
+# remplacer `workflow_dispatch` par un déclencheur `workflow_run` sur le workflow
+# "CI" (branche main, conclusion success).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false # ne jamais interrompre un déploiement en cours
+
+jobs:
+  deploy:
+    name: Déployer en production
+    runs-on: ubuntu-latest
+    # L'environnement "production" (Settings > Environments) porte les secrets
+    # et peut exiger une approbation manuelle avant l'exécution du job.
+    environment: production
+    steps:
+      - name: Préparer la clé SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Lancer le script de déploiement sur le VPS
+        run: |
+          ssh -i ~/.ssh/id_deploy \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            "bash /var/www/mosltrans/deploy.sh ${{ github.sha }}"
