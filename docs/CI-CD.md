@@ -22,6 +22,10 @@ flowchart LR
     G --> H[VPS : bin/deploy.sh]
 ```
 
+Le « merge bloqué » est appliqué par la protection de la branche `main` : les trois jobs
+(tests PHP 8.3, tests PHP 8.4, scan des dépendances), une approbation de revue et la
+résolution des conversations sont obligatoires pour fusionner.
+
 Outil : **GitHub Actions**. Le dépôt est déjà sur GitHub, donc aucune infrastructure
 de CI à installer ni à maintenir.
 
