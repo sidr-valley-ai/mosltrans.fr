@@ -321,6 +321,13 @@ chmod -R 775 var/
 echo "Déploiement terminé le $HORODATAGE"
 ```
 
+> **À régler avant le premier déploiement.** L'étape « Droits » (`chown -R www-data:www-data var/`)
+> exige les droits root. Lancé par l'utilisateur `deploy` (non-root, voir `docs/CI-CD.md`), le script
+> s'arrête sur cette ligne, alors que le code, les migrations et le cache sont déjà appliqués.
+> Pistes : une règle `sudoers` limitée à cette seule commande, faire tourner le déploiement sous
+> `www-data`, ou donner les droits sur `var/` par un groupe commun. Le choix est reporté : aucun
+> déploiement n'aura lieu avant le retour du client.
+
 ---
 
 ## 12. En cas de problème
