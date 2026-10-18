@@ -1,245 +1,134 @@
-{% extends 'base.html.twig' %}
+{% extends 'vitrine/layout.html.twig' %}
 
-{% block title %}Contact - MOSLTRANS
-{% endblock %}
+{% block title %}Contact — MOSLTRANS{% endblock %}
 
 {% block body %}
 
-	<main
-		class="relative min-h-screen overflow-hidden bg-slate-50 px-4 py-6 sm:px-8 lg:px-12">
-
-		{# ================= DÉCOR : CAMION ================= #}
-
-		<div class="pointer-events-none absolute right-0 top-24 hidden h-[520px] w-[24%] overflow-hidden lg:block">
-
-			<img
-			src="{{ asset('images/camion.jpg') }}" alt="" class="h-full w-full object-cover">
-
-			{# Fondu à gauche #}
-			<div class="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-slate-50 to-transparent"></div>
-
-			{# Fondu à droite #}
-			<div class="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-slate-50 to-transparent"></div>
-
-			{# Fondu en haut #}
-			<div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-slate-50 to-transparent"></div>
-
-			{# Fondu en bas #}
-			<div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 to-transparent"></div>
-
-		</div>
-
-
-		{# ================= DÉCOR : GLOBE ================= #}
-
-		<img
-		src="{{ asset('images/globe.jpg') }}" alt="" class="absolute bottom-0 left-0 z-0 hidden w-[430px] opacity-60 mix-blend-multiply lg:block">
-
-
-		{# ================= EN-TÊTE ================= #}
-
-		<header class="relative z-10 mx-auto flex max-w-7xl items-start justify-between">
-
-			<img src="{{ asset('images/logo.png') }}" alt="MOSLTRANS - Logistique et transport" class="h-20 w-auto object-contain sm:h-24">
-
-			<div class="hidden text-right sm:block">
-				<p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
-					Plus loin
-				</p>
-
-				<p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
-					ensemble
-				</p>
-
-				<div class="ml-auto mt-2 h-0.5 w-14 rounded-full bg-blue-500"></div>
-			</div>
-
-		</header>
-
-
-		{# ================= CONTENU ================= #}
-
-		<div
-			class="relative z-10 mx-auto mt-8 grid max-w-7xl items-start gap-10 lg:grid-cols-[260px_minmax(0,820px)_220px]">
-
-
-			{# ================= TEXTE GAUCHE ================= #}
-
-			<section class="hidden pt-16 lg:block">
-
-				<h2 class="text-4xl font-light leading-tight text-slate-800">
-					Votre<br>
-					logistique,
-					<br>
-
-					<span class="font-semibold text-blue-600">
-						notre priorité
-					</span>
-				</h2>
-
-				<div class="mt-5 h-0.5 w-12 rounded-full bg-blue-500"></div>
-
-
-				<ul class="mt-8 space-y-5 text-slate-600">
-
-					<li class="flex items-center gap-3">
-						<span class="text-xl text-blue-600">📦</span>
-						<span>Transport</span>
-					</li>
-
-					<li class="flex items-center gap-3">
-						<span class="text-xl text-blue-600">📍</span>
-						<span>Suivi</span>
-					</li>
-
-					<li class="flex items-center gap-3">
-						<span class="text-xl text-blue-600">✓</span>
-						<span>Fiabilité</span>
-					</li>
-
-				</ul>
-
-			</section>
-
-
-			{# ================= FORMULAIRE ================= #}
-
-			<section
-				class="w-full rounded-3xl bg-white p-6 shadow-xl shadow-slate-300/30 sm:p-10">
-
-				{# Icône #}
-
-				<div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-
-					<svg class="h-8 w-8 text-slate-700" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-						<rect x="2.5" y="5" width="19" height="14" rx="2.5"/>
-						<path d="M3 7l9 6 9-6"/>
-					</svg>
-
-				</div>
-
-
-				{# Titre #}
-
-				<div class="mb-8 text-center">
-
-					<h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-						Contactez-nous
-					</h1>
-
-					<p class="mt-2 text-slate-500">
-						Une question ? Envoyez-nous un message.
-					</p>
-
-				</div>
-
-
-				{# Formulaire Tailwind #}
-
-				{{ form_start(form, {
-                'attr': {
-                    'class': 'space-y-5'
-                }
-            }) }}
-
-
-				{# Nom #}
-
-				<div>
-
-					{{ form_label(form.name, 'Nom', {
-                        'label_attr': {
-                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
-                        }
-                    }) }}
-
-					{{ form_widget(form.name, {
-                        'attr': {
-                            'class': 'w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
-                        }
-                    }) }}
-
-					{{ form_errors(form.name) }}
-
-				</div>
-
-
-				{# Adresse e-mail #}
-
-				<div>
-
-					{{ form_label(form.email, 'Adresse e-mail', {
-                        'label_attr': {
-                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
-                        }
-                    }) }}
-
-					{{ form_widget(form.email, {
-                        'attr': {
-                            'class': 'w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
-                        }
-                    }) }}
-
-					{{ form_errors(form.email) }}
-
-				</div>
-
-
-				{# Message #}
-
-				<div>
-
-					{{ form_label(form.message, 'Message', {
-                        'label_attr': {
-                            'class': 'mb-2 block text-sm font-semibold text-slate-800'
-                        }
-                    }) }}
-
-					{{ form_widget(form.message, {
-                        'attr': {
-                            'rows': 5,
-                            'class': 'w-full resize-y rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100'
-                        }
-                    }) }}
-
-					{{ form_errors(form.message) }}
-
-				</div>
-
-
-				{# Bouton Envoyer #}
-
-				<button type="submit" class="mt-2 flex w-full items-center justify-center gap-3 rounded-lg bg-slate-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-300">
-					Envoyer
-
-					<svg class="h-5 w-5" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M22 2L11 13"/>
-						<path d="M22 2l-7 20-4-9-9 4 20-7z"/>
-					</svg>
-
-				</button>
-
-				{{ form_end(form) }}
-
-			</section>
-
-
-			{# ================= TEXTE DROITE ================= #}
-
-			<section class="hidden self-end pb-8 xl:block">
-
-				<p class="text-sm font-medium uppercase leading-7 tracking-[0.25em] text-slate-500">
-					Des solutions<br>
-					de transport<br>
-					pour demain
-				</p>
-
-				<div class="mt-2 h-0.5 w-14 rounded-full bg-blue-500"></div>
-
-			</section>
-
-		</div>
-
-	</main>
+<!-- ============================== PAGE CONTACT ============================== -->
+  <div class="pg-head contact">
+    <div class="wrap">
+      <p class="crumb">ACCUEIL &nbsp;/&nbsp; CONTACT</p>
+      <h1>Contactez-nous</h1>
+      <p>Une question, un devis ? Nous répondons sous 24 heures ouvrées.</p>
+    </div>
+  </div>
+
+  <div class="ct-wrap">
+    <div class="wrap ct-grid">
+
+      <div class="ct-left">
+        <img class="ct-logo" src="{{ asset('images/logo.png') }}" alt="MOSLTRANS — Logistique et transport">
+        <p class="eyebrow">CONTACT</p>
+        <p class="ct-title">Votre logistique,<b>notre priorité</b></p>
+        <div class="ct-bar"></div>
+
+        <div class="ct-info">
+          <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+          <span><p class="k">TÉLÉPHONE</p><p class="v"><a href="tel:+33387000000">03 87 00 00 00</a></p></span>
+        </div>
+
+        <div class="ct-info">
+          <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg></span>
+          <span><p class="k">E-MAIL</p><p class="v"><a href="mailto:contact@mosltrans.fr?subject=Demande%20d%27information%20-%20site%20MOSLTRANS">contact@mosltrans.fr</a></p></span>
+        </div>
+
+        <div class="ct-info">
+          <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
+          <span><p class="k">ADRESSE</p><p class="v"><a href="https://maps.google.com/?q=MOSLTRANS+Metz+Grand+Est" target="_blank" rel="noopener noreferrer">Metz, Grand Est</a></p></span>
+        </div>
+
+        <div class="ct-info" style="margin-bottom:0">
+          <span class="ic2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <span><p class="k">HORAIRES</p><p class="v">Lun – ven, 8h – 18h</p></span>
+        </div>
+      </div>
+
+      <div class="ct-form">
+        <span class="enveloppe">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg>
+        </span>
+        <h2>Contactez-nous</h2>
+        <p class="sub">Une question ? Envoyez-nous un message.</p>
+
+        {{ form_start(form, { attr: { novalidate: 'novalidate' } }) }}
+
+          <div class="field">
+            {{ form_label(form.name, 'Nom') }}
+            {{ form_widget(form.name, { attr: { placeholder: 'Jean Dupont' } }) }}
+            <div class="err">{{ form_errors(form.name) }}</div>
+          </div>
+
+          <div class="field">
+            {{ form_label(form.email, 'Adresse e-mail') }}
+            {{ form_widget(form.email, { attr: { placeholder: 'jean.dupont@exemple.fr' } }) }}
+            <div class="err">{{ form_errors(form.email) }}</div>
+          </div>
+
+          <div class="field">
+            {{ form_label(form.message, 'Message') }}
+            {{ form_widget(form.message, { attr: { rows: 5, maxlength: 255, placeholder: 'Bonjour, je voudrais un devis pour…' } }) }}
+            <div class="err">{{ form_errors(form.message) }}</div>
+            <p class="counter" id="ct-counter">0 / 255 caractères</p>
+          </div>
+
+          <button type="submit" class="btn send">
+            Envoyer
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10.5 13.5M21 3l-6.5 18-4-8-8-4z"/></svg>
+          </button>
+
+        {{ form_end(form) }}
+
+        <p style="text-align:center"><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
+      </div>
+
+</div>
+    </div>
+  
+<!-- ============================== LOCALISATION ============================== -->
+<section class="localisation" aria-label="Localisation de MOSLTRANS à Metz">
+
+  <div class="plan-zone">
+    <svg class="plan" viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Plan de situation à Metz">
+      <rect width="1200" height="360" fill="#f2efe9"/>
+      <path d="M0 0h1200v96C1000 122 840 78 620 100S170 144 0 114Z" fill="#e8efe1"/>
+      <path d="M0 274c220-26 380 32 640 6s420-46 560-22v102H0Z" fill="#e9f0e2"/>
+      <ellipse cx="230" cy="150" rx="150" ry="46" fill="#dfe9d4"/>
+      <ellipse cx="980" cy="246" rx="170" ry="50" fill="#dfe9d4"/>
+      <path d="M0 220C180 204 320 242 500 232s320-60 520-52 130 16 180 10" fill="none" stroke="#bcd9ef" stroke-width="9"/>
+      <path d="M160 360C320 310 420 262 560 218s330-80 460-130" fill="none" stroke="#f6d78a" stroke-width="17"/>
+      <path d="M160 360C320 310 420 262 560 218s330-80 460-130" fill="none" stroke="#fff" stroke-width="10"/>
+      <path d="M0 160C240 150 500 188 740 172s330-54 460-34" fill="none" stroke="#fff" stroke-width="8" opacity=".9"/>
+      <path d="M120 360C240 262 210 180 330 118S560 20 640 0" fill="none" stroke="#fff" stroke-width="7" opacity=".75"/>
+      <text x="792" y="128" font-size="13" font-weight="700" fill="#b45309" font-family="Segoe UI, Arial">A31</text>
+      <g transform="translate(700,162)">
+        <circle r="26" fill="#2a78cc" opacity=".16"/>
+        <path d="M0 -34C14 -34 23 -24 23 -11 23 5 0 26 0 26S-23 5-23 -11c0-13 9-23 23-23Z" fill="#2a78cc"/>
+        <circle cy="-12" r="8" fill="#fff"/>
+      </g>
+      <rect x="528" y="132" rx="8" width="140" height="52" fill="#fff" opacity=".95"/>
+      <text x="546" y="156" font-size="17" font-weight="700" fill="#0f172a" font-family="Segoe UI, Arial">Metz</text>
+      <text x="546" y="174" font-size="12.5" fill="#475569" font-family="Segoe UI, Arial">Grand Est</text>
+    </svg>
+  </div>
+
+  <div class="loc-barre">
+    <div class="wrap">
+      <div class="infos">
+        <span class="ic2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2a78cc" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+        </span>
+        <span>
+          <p class="k">ADRESSE</p>
+          <p class="v">MOSLTRANS — Metz, Grand Est</p>
+        </span>
+      </div>
+      <a class="btn" href="https://maps.google.com/?q=MOSLTRANS+Metz" target="_blank" rel="noopener noreferrer">
+        Itinéraire
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+
+</section>
 
 {% endblock %}

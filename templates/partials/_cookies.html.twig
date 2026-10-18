@@ -1,0 +1,59 @@
+<!-- ============================== PRÉFÉRENCES COOKIES ============================== -->
+<div class="ck" id="ck" role="dialog" aria-modal="true" aria-labelledby="ck-titre">
+  <div class="ck-veil" data-ck-close></div>
+  <div class="ck-box">
+    <div class="ck-top" id="ck-titre">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0b2b5e" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/></svg>
+      Vos préférences de confidentialité
+    </div>
+
+    <div class="ck-body">
+      <p class="ck-intro">Nous utilisons des composants nécessaires au fonctionnement du site. Vous pouvez choisir d’activer ou non les composants facultatifs.</p>
+
+      <div class="ck-row">
+        <div class="txt">
+          <h4>Essentiel</h4>
+          <p>Nécessaire au fonctionnement du site : session de connexion à l’espace d’administration et protection des formulaires. Ne peut pas être désactivé.</p>
+        </div>
+        <button class="sw" type="button" role="switch" aria-checked="true" aria-label="Essentiel, toujours actif" disabled></button>
+      </div>
+
+      <div class="ck-row">
+        <div class="txt">
+          <h4>Fonctionnel</h4>
+          <p>Permet au site de mémoriser vos choix, par exemple pour ne plus afficher ce message.</p>
+        </div>
+        <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Fonctionnel" data-cat="fonctionnel"></button>
+      </div>
+
+      <div class="ck-row">
+        <div class="txt">
+          <h4>Mesure d’audience</h4>
+          <p>Permet de compter les visites afin d’améliorer le site. Aucune donnée n’est utilisée à des fins publicitaires.</p>
+        </div>
+        <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Mesure d’audience" data-cat="audience"></button>
+      </div>
+
+      <div class="ck-row">
+        <div class="txt">
+          <h4>Marketing</h4>
+          <p>Permettrait de mesurer l’efficacité de campagnes publicitaires. Non utilisé sur ce site.</p>
+        </div>
+        <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Marketing" data-cat="marketing"></button>
+      </div>
+
+      <p class="ck-intro" style="margin-top:4px">Plus d’informations dans notre <a href="{{ path('app_confidentialite') }}" style="color:#2a78cc" id="ck-lien">politique de confidentialité</a>.</p>
+    </div>
+
+    <div class="ck-actions">
+      <button type="button" data-choix="reglages">Enregistrer les réglages</button>
+      <button type="button" data-choix="refus">Refuser</button>
+      <button type="button" class="ck-accept" data-choix="tout">Accepter tout</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status">
+  <span class="ok-rond"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span>
+  <span id="toast-texte">Vos préférences ont été enregistrées.</span>
+</div>

@@ -1,0 +1,45 @@
+{% extends 'vitrine/layout.html.twig' %}
+
+{% block title %}Mentions légales — MOSLTRANS{% endblock %}
+
+{% block body %}
+
+<!-- ============================== MENTIONS LÉGALES ============================== -->
+  <div class="pg-head">
+    <div class="wrap">
+      <p class="crumb">ACCUEIL &nbsp;/&nbsp; MENTIONS LÉGALES</p>
+      <h1>Mentions légales</h1>
+    </div>
+  </div>
+  <div class="pg-body">
+    <div class="wrap">
+      <div class="lg-card">
+        <p class="lg-note">Les éléments en italique sont à compléter avec les informations réelles de l’entreprise.</p>
+
+        <h2>Éditeur du site</h2>
+        <p>MOSLTRANS, entreprise de transport et de logistique.<br>
+        Siège social : <em>adresse complète à compléter</em>, Metz, Grand Est.<br>
+        Téléphone : <a href="tel:+33387000000" style="color:#2a78cc">03 87 00 00 00</a> — E-mail : <a href="mailto:contact@mosltrans.fr" style="color:#2a78cc">contact@mosltrans.fr</a><br>
+        <em>Forme juridique, capital social, numéro SIRET et numéro de TVA à compléter.</em></p>
+
+        <h2>Directeur de la publication</h2>
+        <p><em>Nom du responsable à compléter</em>, représentant légal de MOSLTRANS.</p>
+
+        <h2>Hébergement</h2>
+        <p><em>Nom de l’hébergeur, adresse et téléphone à compléter.</em></p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>L’ensemble des contenus de ce site (textes, images, logo) est la propriété de MOSLTRANS. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
+
+        <h2>Responsabilité</h2>
+        <p>MOSLTRANS s’efforce de diffuser des informations exactes et à jour. Les tarifs et délais communiqués par l’intermédiaire du site sont indicatifs et ne constituent pas un engagement contractuel.</p>
+
+        <h2>Données personnelles</h2>
+        <p>Le traitement des données transmises par les formulaires est détaillé dans la <a href="{{ path('app_confidentialite') }}" style="color:#2a78cc">politique de confidentialité</a>.</p>
+
+        <p class="lg-maj">Dernière mise à jour : septembre 2026.</p>
+        <p><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
+      </div>
+</div>
+    </div>
+  {% endblock %}

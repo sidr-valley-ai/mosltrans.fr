@@ -1,0 +1,38 @@
+{#
+    Mise en page des pages publiques du site vitrine.
+    Indépendante de base.html.twig : la page de connexion et l'administration
+    ne reçoivent ni l'en-tête, ni le pied de page, ni les styles de la vitrine.
+#}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{% block title %}MOSLTRANS — Transport et logistique{% endblock %}</title>
+    <meta name="description" content="{% block description %}MOSLTRANS, transport de marchandises dans le Grand Est et partout en France, depuis Metz.{% endblock %}">
+    <link rel="icon" href="{{ asset('images/favicon.png') }}">
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        <script type="module" src="{{ asset('js/mosltrans.js') }}"></script>
+    {% endblock %}
+
+    {# Chargée après app.css pour que le style de la vitrine soit prioritaire #}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/mosltrans.css') }}">
+    {% endblock %}
+</head>
+<body>
+
+    {% block header %}{% include 'partials/_header.html.twig' %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    {% block footer %}{% include 'partials/_footer.html.twig' %}{% endblock %}
+
+    {% include 'partials/_menu_mobile.html.twig' %}
+    {% include 'partials/_modal_services.html.twig' %}
+    {% include 'partials/_cookies.html.twig' %}
+
+</body>
+</html>
