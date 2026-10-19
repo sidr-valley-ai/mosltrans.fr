@@ -10,10 +10,13 @@ Pour l'installation sur un poste de développement, voir [`INSTALLATION.md`](INS
 | Élément | Version attendue | Vérification |
 |---|---|---|
 | PHP | 8.2 minimum (contrainte `composer.json`) | `php -v` |
-| Extensions PHP | `ctype`, `iconv`, `pdo_sqlite`, `mbstring`, `intl` | `php -m` |
+| Extensions PHP | `ctype`, `iconv`, `pdo_sqlite`, `mbstring`, `intl`, `xml` | `php -m` |
 | Composer | 2.x | `composer --version` |
 | Serveur web | Apache avec `mod_rewrite`, ou Nginx | — |
 | Accès | SSH ou SFTP, et droits d'écriture sur `var/` | — |
+
+L'extension `xml` est exigée par `symfony/framework-bundle` et `symfony/security-bundle` :
+sans elle, `composer install --no-dev` échoue sur le serveur.
 
 La base étant un fichier SQLite, **aucun serveur de base de données n'est à installer**.
 C'était la contrainte du client inscrite dans la convention de stage.
