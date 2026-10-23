@@ -31,7 +31,8 @@ class DashboardController extends AbstractDashboardController
           ->setTitle(sprintf(
               '<img src="%s" alt="" class="brand-logo"><span class="sr-only">MOSLTRANS</span>',
               $logoUrl
-          ));
+          ))
+          ->setFaviconPath('images/favicon.png');
     }
 
     public function configureMenuItems(): iterable
