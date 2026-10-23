@@ -610,3 +610,37 @@
   section.addEventListener('focusout', demarrer);
 
 })();
+
+// ---- Politique de confidentialité : copie de l'adresse e-mail -------------
+(function () {
+  var bouton = document.getElementById('copier');
+  var message = document.getElementById('copie-ok');
+  if (!bouton) return;                       // le bouton n'existe que sur cette page
+  bouton.addEventListener('click', function () {
+    var adresse = 'contact@mosltrans.fr';
+    function confirmer() {
+      message.hidden = false;
+      bouton.textContent = 'Adresse copiée';
+      setTimeout(function () {
+        message.hidden = true;
+        bouton.textContent = 'Copier l’adresse';
+      }, 2500);
+    }
+    function secours() {
+      var z = document.createElement('textarea');
+      z.value = adresse;
+      z.setAttribute('readonly', '');
+      z.style.position = 'absolute';
+      z.style.left = '-9999px';
+      document.body.appendChild(z);
+      z.select();
+      try { document.execCommand('copy'); confirmer(); } catch (e) {}
+      document.body.removeChild(z);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(adresse).then(confirmer).catch(secours);
+    } else {
+      secours();
+    }
+  });
+})();

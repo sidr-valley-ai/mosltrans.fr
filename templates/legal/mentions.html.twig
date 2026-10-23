@@ -5,41 +5,74 @@
 {% block body %}
 
 <!-- ============================== MENTIONS LÉGALES ============================== -->
-  <div class="pg-head">
+  <div class="pg-head mentions">
     <div class="wrap">
       <p class="crumb">ACCUEIL &nbsp;/&nbsp; MENTIONS LÉGALES</p>
       <h1>Mentions légales</h1>
+      <p>Informations légales relatives au site mosltrans.fr et à son éditeur.</p>
     </div>
   </div>
+
   <div class="pg-body">
-    <div class="wrap">
+    <div class="wrap lg-grid">
+
+      <aside class="lg-somm">
+        <p class="k">SOMMAIRE</p>
+        <a href="#editeur">Éditeur du site</a>
+        <a href="#directeur">Directeur de la publication</a>
+        <a href="#hebergement">Hébergement</a>
+        <a href="#propriete">Propriété intellectuelle</a>
+        <a href="#responsabilite">Responsabilité</a>
+        <a href="#donnees">Données personnelles</a>
+
+        <div class="lg-tel">
+          <p class="k">UNE QUESTION ?</p>
+          <a class="num" href="tel:+33387000000">03 87 00 00 00</a>
+          <span>Du lundi au vendredi, 8h – 18h</span>
+        </div>
+      </aside>
+
       <div class="lg-card">
         <p class="lg-note">Les éléments en italique sont à compléter avec les informations réelles de l’entreprise.</p>
 
-        <h2>Éditeur du site</h2>
-        <p>MOSLTRANS, entreprise de transport et de logistique.<br>
-        Siège social : <em>adresse complète à compléter</em>, Metz, Grand Est.<br>
-        Téléphone : <a href="tel:+33387000000" style="color:#2a78cc">03 87 00 00 00</a> — E-mail : <a href="mailto:contact@mosltrans.fr" style="color:#2a78cc">contact@mosltrans.fr</a><br>
-        <em>Forme juridique, capital social, numéro SIRET et numéro de TVA à compléter.</em></p>
+        <section id="editeur">
+          <h2>Éditeur du site</h2>
+          <p>MOSLTRANS, entreprise de transport et de logistique.<br>
+          Siège social : <em>adresse complète à compléter</em>, Metz, Grand Est.<br>
+          Téléphone : <a href="tel:+33387000000">03 87 00 00 00</a> — E-mail : <a href="mailto:contact@mosltrans.fr?subject=Question%20sur%20les%20mentions%20l%C3%A9gales&body=Bonjour%2C%0A%0AJe%20vous%20contacte%20au%20sujet%20des%20mentions%20l%C3%A9gales%20du%20site%20mosltrans.fr.%0A%0A-%20Ma%20question%20%3A%20%0A%0ACordialement%2C%0A">contact@mosltrans.fr</a><br>
+          <em>Forme juridique, capital social, numéro SIRET et numéro de TVA à compléter.</em></p>
+        </section>
 
-        <h2>Directeur de la publication</h2>
-        <p><em>Nom du responsable à compléter</em>, représentant légal de MOSLTRANS.</p>
+        <section id="directeur">
+          <h2>Directeur de la publication</h2>
+          <p><em>Nom du responsable à compléter</em>, représentant légal de MOSLTRANS.</p>
+        </section>
 
-        <h2>Hébergement</h2>
-        <p><em>Nom de l’hébergeur, adresse et téléphone à compléter.</em></p>
+        <section id="hebergement">
+          <h2>Hébergement</h2>
+          <p><em>Nom de l’hébergeur, adresse et téléphone à compléter.</em></p>
+        </section>
 
-        <h2>Propriété intellectuelle</h2>
-        <p>L’ensemble des contenus de ce site (textes, images, logo) est la propriété de MOSLTRANS. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
+        <section id="propriete">
+          <h2>Propriété intellectuelle</h2>
+          <p>L’ensemble des contenus de ce site (textes, images, logo) est la propriété de MOSLTRANS. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
+        </section>
 
-        <h2>Responsabilité</h2>
-        <p>MOSLTRANS s’efforce de diffuser des informations exactes et à jour. Les tarifs et délais communiqués par l’intermédiaire du site sont indicatifs et ne constituent pas un engagement contractuel.</p>
+        <section id="responsabilite">
+          <h2>Responsabilité</h2>
+          <p>MOSLTRANS s’efforce de diffuser des informations exactes et à jour. Les tarifs et délais communiqués par l’intermédiaire du site sont indicatifs et ne constituent pas un engagement contractuel.</p>
+        </section>
 
-        <h2>Données personnelles</h2>
-        <p>Le traitement des données transmises par les formulaires est détaillé dans la <a href="{{ path('app_confidentialite') }}" style="color:#2a78cc">politique de confidentialité</a>.</p>
+        <section id="donnees">
+          <h2>Données personnelles</h2>
+          <p>Le traitement des données transmises par les formulaires est détaillé dans la <a href="{{ path('app_confidentialite') }}">politique de confidentialité</a>.</p>
+        </section>
 
         <p class="lg-maj">Dernière mise à jour : septembre 2026.</p>
         <p><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
       </div>
-</div>
+
     </div>
-  {% endblock %}
+  </div>
+
+{% endblock %}
