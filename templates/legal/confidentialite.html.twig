@@ -5,53 +5,101 @@
 {% block body %}
 
 <!-- ============================== CONFIDENTIALITÉ ============================== -->
-  <div class="pg-head">
+  <div class="pg-head confidentialite">
     <div class="wrap">
       <p class="crumb">ACCUEIL &nbsp;/&nbsp; CONFIDENTIALITÉ</p>
       <h1>Politique de confidentialité</h1>
+      <p>Comment vos données sont collectées, utilisées et protégées sur mosltrans.fr.</p>
     </div>
   </div>
+
   <div class="pg-body">
-    <div class="wrap">
+    <div class="wrap lg-grid">
+
+      <aside class="lg-somm">
+        <p class="k">SOMMAIRE</p>
+        <a href="#responsable">Responsable du traitement</a>
+        <a href="#donnees">Données collectées</a>
+        <a href="#finalite">Pourquoi ces données</a>
+        <a href="#duree">Durée de conservation</a>
+        <a href="#destinataires">Destinataires</a>
+        <a href="#droits">Vos droits</a>
+        <a href="#securite">Sécurité</a>
+        <a href="#suivi">Suivi des envois et carte</a>
+        <a href="#cookies">Cookies</a>
+
+        <div class="lg-tel">
+          <p class="k">EXERCER VOS DROITS</p>
+          <a class="num" id="lien-mail"
+             href="mailto:contact@mosltrans.fr?subject=Exercice%20de%20mes%20droits%20RGPD&body=Bonjour%2C%0A%0AJe%20souhaite%20exercer%20mes%20droits%20sur%20mes%20donn%C3%A9es%20personnelles%20%3A%0A%0A-%20Droit%20concern%C3%A9%20%28acc%C3%A8s%2C%20rectification%2C%20suppression%2C%20opposition%2C%20portabilit%C3%A9%29%20%3A%20%0A-%20Nom%20et%20pr%C3%A9nom%20%3A%20%0A-%20Adresse%20e-mail%20utilis%C3%A9e%20sur%20le%20site%20%3A%20%0A%0ACordialement%2C%0A">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>
+            contact@mosltrans.fr
+          </a>
+          <span>Réponse sous un mois maximum</span>
+          <button type="button" class="copier" id="copier">Copier l’adresse</button>
+          <p class="copie-ok" id="copie-ok" role="status" hidden>Adresse copiée.</p>
+        </div>
+      </aside>
+
       <div class="lg-card">
         <p class="lg-note">Document conforme au RGPD. Vérifiez la durée de conservation avec votre responsable avant publication.</p>
 
-        <h2>Responsable du traitement</h2>
-        <p>MOSLTRANS, Metz, Grand Est — contact@mosltrans.fr</p>
+        <section id="responsable">
+          <h2>Responsable du traitement</h2>
+          <p>MOSLTRANS, Metz, Grand Est — <a href="mailto:contact@mosltrans.fr">contact@mosltrans.fr</a></p>
+        </section>
 
-        <h2>Données collectées</h2>
-        <p>Nous collectons uniquement les informations que vous saisissez dans nos formulaires :</p>
-        <ul>
-          <li>Formulaire de contact : nom, adresse e-mail et message</li>
-          <li>Demande de devis : coordonnées, informations sur la marchandise, lieux de départ et de destination</li>
-        </ul>
+        <section id="donnees">
+          <h2>Données collectées</h2>
+          <p>Nous collectons uniquement les informations que vous saisissez dans nos formulaires :</p>
+          <ul>
+            <li>Formulaire de contact : nom, adresse e-mail et message</li>
+            <li>Demande de devis : coordonnées, informations sur la marchandise, lieux de départ et de destination</li>
+          </ul>
+        </section>
 
-        <h2>Pourquoi ces données</h2>
-        <p>Elles servent uniquement à répondre à votre demande et à établir une proposition commerciale. La base légale est votre consentement, matérialisé par l’envoi du formulaire.</p>
+        <section id="finalite">
+          <h2>Pourquoi ces données</h2>
+          <p>Elles servent uniquement à répondre à votre demande et à établir une proposition commerciale. La base légale est votre consentement, matérialisé par l’envoi du formulaire.</p>
+        </section>
 
-        <h2>Durée de conservation</h2>
-        <p>Les demandes sont conservées trois ans après le dernier contact, puis supprimées.</p>
+        <section id="duree">
+          <h2>Durée de conservation</h2>
+          <p>Les demandes sont conservées trois ans après le dernier contact, puis supprimées.</p>
+        </section>
 
-        <h2>Destinataires</h2>
-        <p>Vos données sont traitées uniquement par l’équipe de MOSLTRANS. Elles ne sont ni vendues, ni louées, ni transmises à des tiers.</p>
+        <section id="destinataires">
+          <h2>Destinataires</h2>
+          <p>Vos données sont traitées uniquement par l’équipe de MOSLTRANS. Elles ne sont ni vendues, ni louées, ni transmises à des tiers.</p>
+        </section>
 
-        <h2>Vos droits</h2>
-        <p>Vous disposez d’un droit d’accès, de rectification, de suppression, d’opposition et de portabilité. Pour l’exercer, écrivez à contact@mosltrans.fr. Vous pouvez également saisir la CNIL.</p>
+        <section id="droits">
+          <h2>Vos droits</h2>
+          <p>Vous disposez d’un droit d’accès, de rectification, de suppression, d’opposition et de portabilité. Pour l’exercer, écrivez à <a href="mailto:contact@mosltrans.fr">contact@mosltrans.fr</a>. Vous pouvez également saisir la CNIL.</p>
+        </section>
 
-        <h2>Sécurité</h2>
-        <p>L’accès aux demandes est réservé au personnel autorisé, par un compte protégé par mot de passe. Les formulaires sont protégés contre les envois frauduleux et les données saisies sont vérifiées avant enregistrement.</p>
+        <section id="securite">
+          <h2>Sécurité</h2>
+          <p>L’accès aux demandes est réservé au personnel autorisé, par un compte protégé par mot de passe. Les formulaires sont protégés contre les envois frauduleux et les données saisies sont vérifiées avant enregistrement.</p>
+        </section>
 
-        <h2>Suivi des envois et carte</h2>
-        <p>Le suivi d’un envoi ne demande que son numéro de suivi : aucune donnée personnelle n’est affichée, seulement les villes de départ et d’arrivée, l’étape de la livraison et la date de mise à jour.</p>
-        <p>Lorsque vous suivez un envoi, la carte du trajet est affichée à l’aide d’OpenStreetMap. Votre navigateur télécharge alors les images de la carte depuis les serveurs de la fondation OpenStreetMap, qui reçoivent votre adresse IP, comme pour tout site consulté. La carte n’est chargée qu’après une recherche : un simple passage sur le site ne contacte pas ce service. Voir la <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">politique de confidentialité d’OpenStreetMap</a>.</p>
-        <p>Les villes des envois sont placées sur la carte grâce au service de géocodage de la Géoplateforme de l’IGN. Cette opération est faite par notre serveur au moment de l’enregistrement de l’envoi : aucune donnée de visiteur n’est transmise à l’IGN.</p>
+        <section id="suivi">
+          <h2>Suivi des envois et carte</h2>
+          <p>Le suivi d’un envoi ne demande que son numéro de suivi : aucune donnée personnelle n’est affichée, seulement les villes de départ et d’arrivée, l’étape de la livraison et la date de mise à jour.</p>
+          <p>Lorsque vous suivez un envoi, la carte du trajet est affichée à l’aide d’OpenStreetMap. Votre navigateur télécharge alors les images de la carte depuis les serveurs de la fondation OpenStreetMap, qui reçoivent votre adresse IP, comme pour tout site consulté. La carte n’est chargée qu’après une recherche : un simple passage sur le site ne contacte pas ce service. Voir la <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">politique de confidentialité d’OpenStreetMap</a>.</p>
+          <p>Les villes des envois sont placées sur la carte grâce au service de géocodage de la Géoplateforme de l’IGN. Cette opération est faite par notre serveur au moment de l’enregistrement de l’envoi : aucune donnée de visiteur n’est transmise à l’IGN.</p>
+        </section>
 
-        <h2>Cookies</h2>
-        <p>Ce site n’utilise aucun cookie de mesure d’audience ni de publicité. Vous pouvez à tout moment revoir vos préférences depuis le lien « Gérer mes cookies » en bas de page.</p>
+        <section id="cookies">
+          <h2>Cookies</h2>
+          <p>Ce site n’utilise aucun cookie de mesure d’audience ni de publicité. Vous pouvez à tout moment revoir vos préférences depuis le lien « Gérer mes cookies » en bas de page.</p>
+        </section>
 
         <p class="lg-maj">Dernière mise à jour : octobre 2026.</p>
         <p><a class="retour" href="{{ path('app_home') }}">← Retour à l’accueil</a></p>
       </div>
-</div>
+
     </div>
-  {% endblock %}
+  </div>
+
+{% endblock %}
