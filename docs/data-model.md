@@ -1,4 +1,4 @@
-# MOSLTRANS — Modèle de données (périmètre S1 → S4)
+# MOSLTRANS : Modèle de données (périmètre S1 → S4)
 
 > Référence pédagogique · 4 tables métier · SQLite · Doctrine ORM (Symfony 7.4)
 > Script de création : `migrations/` · Entités : `src/Entity/`
@@ -107,9 +107,9 @@ Lecture du trait `LEAD ||--o{ STATUS_HISTORY` :
 
 ---
 
-## 3. MCD — Cardinalités Merise
+## 3. MCD : Cardinalités Merise
 
-### Entités — 4
+### Entités : 4
 
 | # | Entité | Identifiant | Rôle |
 |---|--------|-------------|------|
@@ -147,7 +147,7 @@ la créer.
 
 ---
 
-## 4. MPD — 4 tables
+## 4. MPD : 4 tables
 
 > Les types sont ceux de **SQLite** tels que Doctrine les génère
 > (voir `migrations/`). `DATETIME` y est stocké en texte ISO 8601.
@@ -189,7 +189,7 @@ Index : `IDX_2F6A07CE55458D` sur `lead_id`.
 | subject | VARCHAR(255) | NOT NULL |
 | sent_at | DATETIME | NOT NULL |
 | success | BOOLEAN | NOT NULL |
-| error | CLOB | nullable — message d'erreur si `success = false` |
+| error | CLOB | nullable, message d'erreur si `success = false` |
 | lead_id | INTEGER | FK → LEAD, NOT NULL, ON DELETE CASCADE |
 
 Index : `IDX_9A7A188455458D` sur `lead_id`.
@@ -200,8 +200,8 @@ Index : `IDX_9A7A188455458D` sur `lead_id`.
 |---------|------|-------------|
 | id | INTEGER | PK, AUTOINCREMENT |
 | email | VARCHAR(180) | NOT NULL, **UNIQUE** (`UNIQ_IDENTIFIER_EMAIL`) |
-| roles | CLOB | NOT NULL — tableau JSON, ex. `["ROLE_ADMIN"]` |
-| password | VARCHAR(255) | NOT NULL — hash, jamais le mot de passe en clair |
+| roles | CLOB | NOT NULL, tableau JSON, ex. `["ROLE_ADMIN"]` |
+| password | VARCHAR(255) | NOT NULL, hash, jamais le mot de passe en clair |
 
 > Pourquoi `VARCHAR(180)` ici et `255` ailleurs ? C'est la valeur par défaut que
 > propose Symfony pour un identifiant de connexion (limite d'index sur certains
@@ -214,7 +214,7 @@ Index : `IDX_9A7A188455458D` sur `lead_id`.
 
 Une même idée, trois écritures. L'association **LEAD → STATUS_HISTORY** :
 
-**① MCD (Merise)** : `LEAD (0,N) ——CHANGER_DE_STATUT—— (1,1) STATUS_HISTORY`
+**① MCD (Merise)** : `LEAD (0,N) --CHANGER_DE_STATUT-- (1,1) STATUS_HISTORY`
 
 **② MPD (SQL)** : la clé étrangère est dans la table du côté N.
 
@@ -234,12 +234,12 @@ CREATE INDEX IDX_2F6A07CE55458D ON status_history (lead_id);
 **③ Doctrine (PHP)** : deux attributs qui se répondent des deux côtés.
 
 ```php
-// src/Entity/StatusHistory.php  — le côté « N » : il porte la clé étrangère
+// src/Entity/StatusHistory.php : le côté « N » : il porte la clé étrangère
 #[ORM\ManyToOne(inversedBy: 'statusHistories')]
 #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
 private ?Lead $lead = null;
 
-// src/Entity/Lead.php  — le côté « 1 » : il liste ses historiques
+// src/Entity/Lead.php : le côté « 1 » : il liste ses historiques
 #[ORM\OneToMany(targetEntity: StatusHistory::class, mappedBy: 'lead',
                 cascade: ['remove'], orphanRemoval: true)]
 private Collection $statusHistories;
@@ -266,7 +266,7 @@ Ce qui existe en double (code **et** base), et pourquoi :
 | `status` ∈ {nouveau, en_cours, traite, clos} | non | `Assert\Choice` | SQLite ne sait pas faire d'ENUM |
 | `message` 10 à 255 caractères | non | `Assert\Length` | règle de saisie, pas d'intégrité |
 | `lead_id` doit exister | **oui** (FK) | oui (relation) | la base est le dernier rempart |
-| `user.email` unique | **oui** (index) | — | deux comptes identiques = faille |
+| `user.email` unique | **oui** (index) | - | deux comptes identiques = faille |
 
 ---
 
@@ -423,7 +423,7 @@ C'est l'ordre des migrations réelles :
 
 1. Un changement de statut concerne exactement un lead. Sans `NOT NULL`, on pourrait
    avoir un historique « orphelin » rattaché à aucun lead : une ligne sans sens.
-2. `LEAD (0,N) — (1,1) NOTE_INTERNE` ; `lead_id` est dans `note_interne`.
+2. `LEAD (0,N) -- (1,1) NOTE_INTERNE` ; `lead_id` est dans `note_interne`.
 3. Elles sont supprimées avec lui. Sans `CASCADE`, la base refuserait de supprimer
    le lead tant que des historiques le référencent (violation de clé étrangère).
 4. Chaque ligne doit se suffire à elle-même : on lit une ligne sans avoir à
@@ -432,7 +432,7 @@ C'est l'ordre des migrations réelles :
 6. `SELECT l.id, COUNT(s.id) FROM lead l LEFT JOIN status_history s ON s.lead_id = l.id GROUP BY l.id;`
    (on compte `s.id`, pas `*`, pour que les leads sans historique donnent bien 0).
 7. Colonne `user_id` (nullable : un changement automatique n'a pas d'auteur) dans
-   `status_history`, `USER (0,N) — (0,1) STATUS_HISTORY`. DM02 disait « aucun lien » :
+   `status_history`, `USER (0,N) -- (0,1) STATUS_HISTORY`. DM02 disait « aucun lien » :
    il faudrait la réécrire en « aucun lien *métier* entre un visiteur et un compte ».
 
 </details>

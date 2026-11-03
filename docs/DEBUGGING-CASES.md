@@ -1,9 +1,9 @@
-# Cas de débogage — mosltrans.fr
+# Cas de débogage : mosltrans.fr
 
 Ce document est un recueil pédagogique de bugs réels rencontrés et corrigés
 pendant la mise en route locale du projet. Contrairement à `INSTALLATION.md`
 (qui dit *quoi faire*), ce document explique *comment on trouve la cause*
-d'une erreur Symfony — la méthode compte plus que le bug lui-même.
+d'une erreur Symfony, la méthode compte plus que le bug lui-même.
 
 ## Méthode générale
 
@@ -14,7 +14,7 @@ Face à une erreur 500 Symfony, dans cet ordre :
    (ex. « run `php bin/console tailwind:build` »).
 2. **Remonter la stack trace** jusqu'au premier fichier qui appartient au
    projet (`src/`, `config/`, `templates/`) plutôt que de s'arrêter sur la
-   ligne de `vendor/` où l'exception est *levée* — elle n'y est pas forcément
+   ligne de `vendor/` où l'exception est *levée*, elle n'y est pas forcément
    *causée*.
 3. **Vérifier la config avant de soupçonner le code applicatif.** Les 4 bugs
    ci-dessous sont tous des oublis de configuration ou de champ, jamais un
@@ -24,9 +24,9 @@ Face à une erreur 500 Symfony, dans cet ordre :
    modification récente a supprimé quelque chose sans le vouloir.
 5. **Après un `cache:clear`, si le comportement ne change toujours pas**,
    voir le piège du serveur `php -S` en bas de ce document avant de remettre
-   en cause le correctif — c'est très probablement le serveur, pas la config.
+   en cause le correctif, c'est très probablement le serveur, pas la config.
 
-## Cas 1 — CSS absent (Tailwind jamais compilé)
+## Cas 1 : CSS absent (Tailwind jamais compilé)
 
 **Symptôme :** page blanche / erreur 500 sur `/contact` :
 > Built Tailwind CSS file does not exist: run "php bin/console tailwind:build" to generate it
@@ -37,7 +37,7 @@ mais le bundle `symfonycasts/tailwind-bundle` n'avait jamais généré son
 fichier compilé.
 
 **Cause racine :** `php bin/console tailwind:build` n'avait jamais été
-exécuté après `composer install` — ce n'est pas un package npm, donc pas de
+exécuté après `composer install`, ce n'est pas un package npm, donc pas de
 `npm install` pour le rappeler ; c'est une étape Symfony explicite et facile
 à oublier.
 
@@ -46,10 +46,10 @@ passage). Documenté comme étape obligatoire dans `INSTALLATION.md`, avec la
 recommandation d'utiliser `--watch` en dev pour ne pas avoir à y repenser.
 
 **À retenir :** quand Symfony dit littéralement quelle commande lancer,
-c'est presque toujours la bonne première piste — ne pas chercher plus loin
+c'est presque toujours la bonne première piste, ne pas chercher plus loin
 avant de l'avoir essayée.
 
-## Cas 2 — Composants Twig d'EasyAdmin introuvables
+## Cas 2 : Composants Twig d'EasyAdmin introuvables
 
 **Symptôme :** après connexion, 500 sur `/admin` :
 > Unknown component "ea:ActionMenu:ActionList:Divider". And no matching anonymous component template was found.
@@ -69,7 +69,7 @@ En lisant le code source de `symfony/ux-twig-component`
   namespace Twig.
 
 **Cause racine :** `config/packages/twig_component.yaml` n'existait tout
-simplement pas dans le projet, donc le bundle restait en mode legacy — un
+simplement pas dans le projet, donc le bundle restait en mode legacy, un
 mode incompatible avec la façon dont EasyAdminBundle 5.x construit son
 interface.
 
@@ -81,12 +81,12 @@ twig_component:
 ```
 
 **À retenir :** un « fichier introuvable » n'est pas toujours un problème de
-fichier manquant — ça peut être un problème de *comment on cherche*. Quand
+fichier manquant, ça peut être un problème de *comment on cherche*. Quand
 un fichier existe visiblement au bon endroit mais que l'erreur persiste,
 c'est le signe qu'il faut lire le code de résolution plutôt que de
 recompter les chemins à l'œil.
 
-## Cas 3 — Statut du lead invisible dans le back-office
+## Cas 3 : Statut du lead invisible dans le back-office
 
 **Symptôme :** le champ « statut » existe en base (colonne `status`,
 migration appliquée), mais n'apparaît nulle part dans la liste ou le
@@ -95,7 +95,7 @@ formulaire d'édition des leads sur `/admin`.
 **Investigation :** `git log --oneline -- src/Controller/Admin/LeadCrudController.php`
 puis `git show <commit>` sur chaque commit touchant ce fichier. Le commit
 `feat(lead): add lead status` avait bien ajouté le champ à l'entité
-`Lead` et à la migration, mais n'avait touché **que** ces deux fichiers —
+`Lead` et à la migration, mais n'avait touché **que** ces deux fichiers :
 jamais `LeadCrudController::configureFields()`.
 
 **Cause racine :** dans EasyAdmin, un champ d'entité n'est visible dans le
@@ -109,10 +109,10 @@ oubliée.
 
 **À retenir :** quand une fonctionnalité « existe en base mais n'apparaît
 pas à l'écran », chercher la couche qui manque plutôt que la donnée
-elle-même — ici, l'entité et la persistance étaient parfaites, c'est la
+elle-même, ici, l'entité et la persistance étaient parfaites, c'est la
 couche de présentation (EasyAdmin) qui n'était jamais reliée.
 
-## Cas 4 — Déconnexion renvoie vers la page Symfony par défaut
+## Cas 4 : Déconnexion renvoie vers la page Symfony par défaut
 
 **Symptôme :** après clic sur « Se déconnecter », l'utilisateur atterrit
 sur la page de bienvenue Symfony au lieu de `/login`.
@@ -128,7 +128,7 @@ logout:
 
 **Cause racine :** sans `target` défini, Symfony redirige par défaut vers
 `/` après déconnexion. Or ce projet n'a **aucune route** sur `/` (voir la
-toute première question de cette série de conversations !) — Symfony
+toute première question de cette série de conversations !), Symfony
 affiche donc sa page de bienvenue par défaut, faute de mieux.
 
 **Correctif :** `target: app_login`.
@@ -137,10 +137,10 @@ affiche donc sa page de bienvenue par défaut, faute de mieux.
 posée sur ce projet (« pourquoi `/` affiche la page Symfony par défaut ? »)
 mais avec une cause différente (redirection de logout vs absence de route
 d'accueil). Un même symptôme peut avoir plusieurs causes distinctes selon
-le chemin qui y mène — toujours vérifier l'URL réellement atteinte et
+le chemin qui y mène, toujours vérifier l'URL réellement atteinte et
 comment on y est arrivé, pas juste ce qui s'affiche.
 
-## Cas 5 — L'historisation ne se déclenchait que depuis EasyAdmin
+## Cas 5 : L'historisation ne se déclenchait que depuis EasyAdmin
 
 **Contexte :** la PR #32 ajoutait un `StatusHistorySubscriber` qui écoutait
 `BeforeEntityUpdatedEvent` d'EasyAdminBundle pour enregistrer chaque
@@ -151,9 +151,9 @@ formulaire d'édition EasyAdmin** ?
 **Investigation :** `BeforeEntityUpdatedEvent` est un événement du *bundle*
 EasyAdmin, pas de Doctrine. Il n'est dispatché que par le contrôleur CRUD
 d'EasyAdmin, quand une sauvegarde passe par son formulaire web. Un
-changement de statut fait autrement — une commande console, un script de
+changement de statut fait autrement, une commande console, un script de
 fixtures, une future route API publique, ou même un `$lead->setStatus(...)`
-suivi d'un `flush()` ailleurs dans le code — ne passe jamais par ce
+suivi d'un `flush()` ailleurs dans le code, ne passe jamais par ce
 contrôleur, donc l'événement n'est jamais dispatché, et l'historique reste
 silencieusement incomplet. Pas d'erreur, pas de log : juste des trous dans
 l'audit trail, découverts uniquement le jour où on en a besoin.
@@ -177,7 +177,7 @@ chemin d'écriture. Un événement Doctrine (`onFlush`, `preUpdate`,
 `postPersist`...) couvre *tous* les chemins, parce qu'ils passent tous par
 l'`EntityManager`.
 
-## Cas 6 — `preUpdate` ne suffit pas pour créer une entité liée dans le même flush
+## Cas 6 : `preUpdate` ne suffit pas pour créer une entité liée dans le même flush
 
 **Contexte :** première tentative de correctif du Cas 5, écrire un listener
 Doctrine sur `Events::preUpdate` :
@@ -199,7 +199,7 @@ public function preUpdate(PreUpdateEventArgs $event): void
 C'est la recette qu'on trouve dans beaucoup de tutoriels Doctrine plus
 anciens pour « créer une entité depuis un listener ».
 
-**Symptôme :** aucune erreur, aucune exception — mais un script de test
+**Symptôme :** aucune erreur, aucune exception, mais un script de test
 direct (créer un `Lead`, changer son statut, `flush()`, relire la base)
 montrait `status_history` toujours vide. Le listener était bien appelé
 (vérifié avec un `error_log` temporaire dans la méthode), et
@@ -210,7 +210,7 @@ requêtes SQL du `flush()` (dans `executeUpdates()`), après que Doctrine a
 déjà figé la liste des entités à insérer (`entityInsertions`). Appeler
 `persist()` + `computeChangeSet()` à ce moment-là calcule bien le changeset
 de la nouvelle entité, mais ne l'ajoute pas à la liste des insertions déjà
-en cours d'exécution pour ce `flush()` — elle est donc calculée puis
+en cours d'exécution pour ce `flush()`, elle est donc calculée puis
 oubliée.
 
 **Cause racine :** mauvais événement pour ce besoin. `onFlush` (pas
@@ -248,14 +248,14 @@ ligne après chaque changement de statut, y compris via un simple
 `$lead->setStatus(...); $em->flush();` en dehors de tout contrôleur admin.
 
 **À retenir :** « ça ne lève pas d'exception » ne veut pas dire « ça
-marche » — ici le code s'exécutait sans erreur mais n'écrivait rien. Pour
+marche », ici le code s'exécutait sans erreur mais n'écrivait rien. Pour
 une fonctionnalité invisible en base malgré un code qui semble correct,
 écrire un petit script de bout en bout (créer → modifier → relire) est plus
 fiable que de relire le code en se fiant à l'absence d'erreur. Et pour
 « créer une entité liée depuis un listener Doctrine », `onFlush` est le bon
-réflexe, pas `preUpdate` — même si d'anciens tutoriels disent le contraire.
+réflexe, pas `preUpdate`, même si d'anciens tutoriels disent le contraire.
 
-## Cas 7 — Un logo en `<img>` dans `setTitle()` rendait le tooltip vide
+## Cas 7 : Un logo en `<img>` dans `setTitle()` rendait le tooltip vide
 
 **Symptôme :** après avoir remplacé le texte « MOSLTRANS » du logo
 EasyAdmin par une image (`Dashboard::new()->setTitle('<img src="..."
@@ -266,7 +266,7 @@ alt="MOSLTRANS">')`), le logo s'affichait correctement, mais le tooltip
 layout.html.twig`, le titre du dashboard est utilisé deux fois à deux
 endroits différents : `{{ ea.dashboardTitle|raw }}` pour l'affichage (HTML
 brut, donc l'`<img>` s'affiche bien), et `title="{{
-ea.dashboardTitle|striptags }}"` pour le tooltip du lien — `striptags`
+ea.dashboardTitle|striptags }}"` pour le tooltip du lien, `striptags`
 retire les balises et ne garde que le texte. Un `<img alt="MOSLTRANS">` n'a
 pas de texte *entre* ses balises (l'attribut `alt` n'en est pas un pour
 `striptags`), donc le résultat est une chaîne vide.
@@ -287,7 +287,7 @@ sprintf(
 )
 ```
 
-(`alt=""` sur l'image car le texte du `<span>` porte déjà l'information —
+(`alt=""` sur l'image car le texte du `<span>` porte déjà l'information :
 éviter que les deux soient annoncés en double par un lecteur d'écran.)
 
 **À retenir :** quand un composant tiers (ici EasyAdmin) réutilise une même
@@ -297,7 +297,7 @@ seulement celui qu'on modifie en premier. Une régression peut être
 invisible à l'écran (le logo s'affichait très bien) tout en cassant
 l'accessibilité ou l'UX ailleurs.
 
-## Piège transverse — le serveur `php -S` garde son cache en mémoire
+## Piège transverse : le serveur `php -S` garde son cache en mémoire
 
 Rencontré en corrigeant le Cas 2 : après avoir ajouté
 `twig_component.yaml` et lancé `php bin/console cache:clear`, l'erreur
@@ -308,7 +308,7 @@ processus PHP qui reste actif** pour toute la session de dev (contrairement
 à un vrai serveur web qui recharge le code à chaque requête via PHP-FPM).
 `cache:clear` régénère bien `var/cache/dev/` sur le disque, mais le
 processus déjà lancé a chargé la classe du conteneur Symfony compilé **en
-mémoire** au premier démarrage — PHP ne peut pas redéfinir une classe déjà
+mémoire** au premier démarrage, PHP ne peut pas redéfinir une classe déjà
 chargée, donc le processus continue de servir l'ancien conteneur tant qu'il
 tourne.
 

@@ -12,8 +12,8 @@ Pour l'installation sur un poste de développement, voir [`INSTALLATION.md`](INS
 | PHP | 8.2 minimum (contrainte `composer.json`) | `php -v` |
 | Extensions PHP | `ctype`, `iconv`, `pdo_sqlite`, `mbstring`, `intl`, `xml` | `php -m` |
 | Composer | 2.x | `composer --version` |
-| Serveur web | Apache avec `mod_rewrite`, ou Nginx | — |
-| Accès | SSH ou SFTP, et droits d'écriture sur `var/` | — |
+| Serveur web | Apache avec `mod_rewrite`, ou Nginx | - |
+| Accès | SSH ou SFTP, et droits d'écriture sur `var/` | - |
 
 L'extension `xml` est exigée par `symfony/framework-bundle` et `symfony/security-bundle` :
 sans elle, `composer install --no-dev` échoue sur le serveur.
@@ -361,7 +361,7 @@ de `bin/deploy.sh` ne fonctionne pas.
 
 ## Ce que cette procédure démontre
 
-Compétence **C8 — Documenter le déploiement d'une application dynamique web ou web mobile** :
+Compétence **C8 : Documenter le déploiement d'une application dynamique web ou web mobile** :
 
 - la procédure est rédigée et tient compte des dépendances et des versions ;
 - le script `bin/deploy.sh` est écrit et commenté ;
