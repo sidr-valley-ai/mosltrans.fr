@@ -1,11 +1,11 @@
-# mosltrans.fr — site vitrine B2B
+# mosltrans.fr, site vitrine B2B
 
 Site vitrine pour MOSLTRANS, réalisé par une stagiaire pour Sidr Valley AI (projet
 école, backend Symfony imposé par le cursus). Objectif double : visibilité pour
 MOSLTRANS et cas d'usage portfolio réel pour Sidr Valley AI.
 
 **Périmètre** : site marketing standalone, indépendant de l'app Fretexia (pas de
-connexion technique entre les deux — aucun risque sur le système de production
+connexion technique entre les deux : aucun risque sur le système de production
 Fretexia/MOSLTRANS).
 
 ## Stack technique
@@ -15,10 +15,10 @@ Fretexia/MOSLTRANS).
 | Backend | Symfony 7.4 (PHP) | formulaires, auth admin (session + CSRF), ORM Doctrine, e-mails (Mailer), limitation de débit |
 | Base de données | SQLite | relationnel, fichier unique, pas de serveur DB à déployer |
 | Back-office | EasyAdmin | liste des leads, changement de statut, historique des statuts et des e-mails |
-| Front — rendu | Twig | templates HTML rendus côté serveur |
-| Front — interactivité | JavaScript natif (`assets/js/mosltrans.js`) | menu, bandeau cookies, suivi d'envoi (`fetch` JSON), copie d'adresse |
-| Front — carte | Leaflet (via AssetMapper) | trajet d'un envoi suivi |
-| Front — style | CSS écrit à la main (`assets/styles/mosltrans.css`) ; Tailwind CSS (via AssetMapper) pour la connexion, la page de succès du contact et le back-office | sans étape de build npm |
+| Front : rendu | Twig | templates HTML rendus côté serveur |
+| Front : interactivité | JavaScript natif (`assets/js/mosltrans.js`) | menu, bandeau cookies, suivi d'envoi (`fetch` JSON), copie d'adresse |
+| Front : carte | Leaflet (via AssetMapper) | trajet d'un envoi suivi |
+| Front : style | CSS écrit à la main (`assets/styles/mosltrans.css`) ; Tailwind CSS (via AssetMapper) pour la connexion, la page de succès du contact et le back-office | sans étape de build npm |
 
 > **Écart entre le choix initial et le code livré.** Le périmètre du 2026-08-20
 > (section « Front » plus bas) prévoyait HTMX et Alpine.js pour l'interactivité,
@@ -28,7 +28,7 @@ Fretexia/MOSLTRANS).
 > back-office sur EasyAdmin. Tailwind n'est utilisé que sur quelques templates.
 > Les sections ci-dessous gardent le raisonnement d'origine, à titre d'historique.
 
-## Backend Symfony — périmètre retenu
+## Backend Symfony : périmètre retenu
 
 Un formulaire de contact "email only" ne justifie pas un framework backend complet.
 Le périmètre retenu est le minimum qui donne un vrai contenu pédagogique Symfony sans
@@ -41,12 +41,12 @@ inventer un besoin métier factice :
 - Statut par lead : `nouveau` / `contacté` / `converti`
 
 Couvre : routing, Doctrine ORM, formulaires + validation, Security component (auth),
-CRUD — éventuellement via EasyAdminBundle pour aller plus vite sur la partie back-office.
+CRUD, éventuellement via EasyAdminBundle pour aller plus vite sur la partie back-office.
 
 ### 2. Historisation des statuts + modèles d'e-mails (préconisation ENI, retenue)
 
 Pour mieux coller aux attendus du Titre Professionnel Développeur Web et Web
-Mobile — traité juste après le coeur du projet (1), avant le configurateur de
+Mobile, traité juste après le coeur du projet (1), avant le configurateur de
 devis :
 
 - **Historisation des statuts** : au lieu d'un simple champ statut sur le
@@ -63,18 +63,18 @@ devis :
 - Le résultat alimente le même back-office leads que le formulaire de contact
   (même statut nouveau/contacté/converti)
 
-À ne faire qu'une fois le back-office leads stable — c'est un bonus, pas une
+À ne faire qu'une fois le back-office leads stable : c'est un bonus, pas une
 dépendance du coeur du projet.
 
-## Front — périmètre retenu (2026-08-20, choix initial)
+## Front : périmètre retenu (2026-08-20, choix initial)
 
 - **Site vitrine** : Twig (rendu serveur Symfony natif) + HTMX/Alpine.js pour
   l'interactivité légère (préféré à Symfony UX/Stimulus-Turbo : même philosophie
   hypermedia, mais déjà connu côté Fretexia et sans étape de build). Mono-stack
-  avec le backend, meilleur SEO natif qu'une SPA — important pour un site pensé
+  avec le backend, meilleur SEO natif qu'une SPA, important pour un site pensé
   pour générer des leads.
 - **React** : réservé au configurateur de devis (l'option ci-dessus), et
-  seulement quand ce composant sera attaqué — pas de SPA globale. À monter
+  seulement quand ce composant sera attaqué, pas de SPA globale. À monter
   comme un composant React isolé dans une page Twig, pas comme un front séparé.
 
 ### Tailwind CSS vs Bootstrap
@@ -90,7 +90,7 @@ Tailwind est retenu plutôt que Bootstrap, pour trois raisons :
   HTMX/Alpine (cf. section Front ci-dessus) : via
   `symfonycasts/tailwind-bundle` (AssetMapper natif Symfony), Tailwind
   compile via un binaire CLI autonome, sans Node ni pipeline JS à
-  maintenir — même philosophie mono-stack Symfony que le reste du projet.
+  maintenir, même philosophie mono-stack Symfony que le reste du projet.
 - **Utility-first plutôt que composants pré-stylés** : mieux adapté à des
   gabarits Twig sur-mesure (hero, sections marketing, formulaire de
   contact, back-office leads) qu'aux composants JS de Bootstrap
@@ -98,7 +98,7 @@ Tailwind est retenu plutôt que Bootstrap, pour trois raisons :
 
 Contrepartie assumée : plus de classes utilitaires à écrire à la main qu'avec
 les composants prêts-à-l'emploi de Bootstrap, donc une légère montée en
-compétence CSS à prévoir pour la stagiaire — compensée par la documentation
+compétence CSS à prévoir pour la stagiaire, compensée par la documentation
 officielle Tailwind, très complète.
 
 ## Hors périmètre (explicitement écarté)
@@ -117,15 +117,15 @@ Pour la mise en production, voir [`docs/DEPLOIEMENT.md`](docs/DEPLOIEMENT.md).
 
 ## Documentation
 
-- [Cycle de vie du développement logiciel (SDLC)](https://claude.ai/code/artifact/3a4456c4-9867-4636-be88-1163ea4f0c43) — guide de formation pour la stagiaire : phases du SDLC, modèles (cascade/Scrum/Kanban/DevOps), bonnes pratiques et ressources.
-- [Stratégie d'Authentification](https://claude.ai/code/artifact/bbcda6c1-35b8-43d3-b4bc-66114b96a42c) — guide de formation pour la stagiaire : choix et mise en oeuvre de l'auth admin côté Symfony.
-- [Vulnérabilités Web](https://claude.ai/code/artifact/0cef7311-19d8-4a3d-9e93-aa8f52ba545f) — guide de formation pour la stagiaire : catalogue des failles courantes (XSS, injection SQL, CSRF...) issues d'OWASP/CERT-FR/CVE, appliquées à mosltrans.fr et à l'authentification par session.
-- [RGPD by Design](https://claude.ai/code/artifact/4a941a50-f405-46cd-8031-3efbd466a1ad) — guide de formation pour la stagiaire : base légale, minimisation, conservation, droits des personnes et Privacy by Design appliqués à la collecte de leads B2B sur mosltrans.fr.
-- [Stratégie Git](https://claude.ai/code/artifact/f209da17-90e3-4b76-b27d-d8f7bfb4925e) — guide de formation pour la stagiaire : modèle de branches, commits atomiques et Conventional Commits en français, cycle complet d'une tâche (branche → commits → PR → review → merge). À lire avant l'initialisation du dépôt.
-- [Semaine 1 — Prise en main](https://claude.ai/code/artifact/0b9e2b1e-d640-4e82-a202-056ee6b536dc) — feuille de route de la première semaine de stage (31/08–04/09) : comment lire une Issue GitHub, déroulé jour par jour du Sprint 1, Definition of Done. Première d'une série hebdomadaire.
-- [Semaine 2 — Back-office authentifié](https://claude.ai/code/artifact/48a70430-84f1-4385-be15-e105588ab5f4) — feuille de route de la deuxième semaine de stage (15–19/09) : authentification Symfony Security, protection du back-office, liste des leads et changement de statut.
-- [Semaine 3 — Historisation des statuts](https://claude.ai/artifact/15ePNtZM8z6NBAXbsrhqCQ) — feuille de route de la troisième semaine de stage (22–26/09) : entité `StatusHistory`, écriture automatique à chaque changement de statut, affichage en timeline, date de relance.
-- [Semaine 4 — Modèles d'e-mails](https://claude.ai/artifact/9B3zVH1WB7FQRBn58wZEBb) — feuille de route de la quatrième semaine de stage (29/09–03/10) : Symfony Mailer, modèles d'e-mails, envoi d'un e-mail à un lead depuis sa fiche avec contenu dynamique.
-- [Gestion de projet MOSLTRANS](https://claude.ai/artifact/TUX33YoJHbKb6zt9qzcEFW) — guide de formation pour la stagiaire : sprints, tickets, branches, PR, revue de code, CI et maîtrise du périmètre, avec une préparation aux questions de la soutenance.
-- [Pipeline CI/CD MOSLTRANS](https://claude.ai/artifact/YDKbkcg9QjhGkzseiPjpnu) — guide de formation pour la stagiaire : tests, scan de sécurité, protection de `main`, déploiement, limites et préparation aux questions de la soutenance. Référence technique : [`docs/CI-CD.md`](docs/CI-CD.md).
-- [`docs/DEBUGGING-CASES.md`](docs/DEBUGGING-CASES.md) — recueil pédagogique de bugs réels (config Tailwind/Twig manquante, champ oublié dans EasyAdmin, redirection de logout) : méthode de diagnostic d'une erreur Symfony, pas juste la solution.
+- [Cycle de vie du développement logiciel (SDLC)](https://claude.ai/code/artifact/3a4456c4-9867-4636-be88-1163ea4f0c43). Guide de formation pour la stagiaire : phases du SDLC, modèles (cascade/Scrum/Kanban/DevOps), bonnes pratiques et ressources.
+- [Stratégie d'Authentification](https://claude.ai/code/artifact/bbcda6c1-35b8-43d3-b4bc-66114b96a42c). Guide de formation pour la stagiaire : choix et mise en oeuvre de l'auth admin côté Symfony.
+- [Vulnérabilités Web](https://claude.ai/code/artifact/0cef7311-19d8-4a3d-9e93-aa8f52ba545f). Guide de formation pour la stagiaire : catalogue des failles courantes (XSS, injection SQL, CSRF...) issues d'OWASP/CERT-FR/CVE, appliquées à mosltrans.fr et à l'authentification par session.
+- [RGPD by Design](https://claude.ai/code/artifact/4a941a50-f405-46cd-8031-3efbd466a1ad). Guide de formation pour la stagiaire : base légale, minimisation, conservation, droits des personnes et Privacy by Design appliqués à la collecte de leads B2B sur mosltrans.fr.
+- [Stratégie Git](https://claude.ai/code/artifact/f209da17-90e3-4b76-b27d-d8f7bfb4925e). Guide de formation pour la stagiaire : modèle de branches, commits atomiques et Conventional Commits en français, cycle complet d'une tâche (branche → commits → PR → review → merge). À lire avant l'initialisation du dépôt.
+- [Semaine 1 : Prise en main](https://claude.ai/code/artifact/0b9e2b1e-d640-4e82-a202-056ee6b536dc). Feuille de route de la première semaine de stage (31/08–04/09) : comment lire une Issue GitHub, déroulé jour par jour du Sprint 1, Definition of Done. Première d'une série hebdomadaire.
+- [Semaine 2 : Back-office authentifié](https://claude.ai/code/artifact/48a70430-84f1-4385-be15-e105588ab5f4). Feuille de route de la deuxième semaine de stage (15–19/09) : authentification Symfony Security, protection du back-office, liste des leads et changement de statut.
+- [Semaine 3 : Historisation des statuts](https://claude.ai/artifact/15ePNtZM8z6NBAXbsrhqCQ). Feuille de route de la troisième semaine de stage (22–26/09) : entité `StatusHistory`, écriture automatique à chaque changement de statut, affichage en timeline, date de relance.
+- [Semaine 4 : Modèles d'e-mails](https://claude.ai/artifact/9B3zVH1WB7FQRBn58wZEBb). Feuille de route de la quatrième semaine de stage (29/09–03/10) : Symfony Mailer, modèles d'e-mails, envoi d'un e-mail à un lead depuis sa fiche avec contenu dynamique.
+- [Gestion de projet MOSLTRANS](https://claude.ai/artifact/TUX33YoJHbKb6zt9qzcEFW). Guide de formation pour la stagiaire : sprints, tickets, branches, PR, revue de code, CI et maîtrise du périmètre, avec une préparation aux questions de la soutenance.
+- [Pipeline CI/CD MOSLTRANS](https://claude.ai/artifact/YDKbkcg9QjhGkzseiPjpnu). Guide de formation pour la stagiaire : tests, scan de sécurité, protection de `main`, déploiement, limites et préparation aux questions de la soutenance. Référence technique : [`docs/CI-CD.md`](docs/CI-CD.md).
+- [`docs/DEBUGGING-CASES.md`](docs/DEBUGGING-CASES.md). Recueil pédagogique de bugs réels (config Tailwind/Twig manquante, champ oublié dans EasyAdmin, redirection de logout) : méthode de diagnostic d'une erreur Symfony, pas juste la solution.
