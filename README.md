@@ -12,13 +12,21 @@ Fretexia/MOSLTRANS).
 
 | Couche | Techno | Rôle |
 |--------|--------|------|
-| Backend | Symfony (PHP) | back-office leads, formulaires, auth admin, ORM Doctrine |
+| Backend | Symfony 7.4 (PHP) | formulaires, auth admin (session + CSRF), ORM Doctrine, e-mails (Mailer), limitation de débit |
 | Base de données | SQLite | relationnel, fichier unique, pas de serveur DB à déployer |
+| Back-office | EasyAdmin | liste des leads, changement de statut, historique des statuts et des e-mails |
 | Front — rendu | Twig | templates HTML rendus côté serveur |
-| Front — interactivité | HTMX | requêtes/swaps HTML sans recharger la page |
-| Front — comportement JS | Alpine.js | petites interactions client (dropdown, toggle...) |
-| Front — style | Tailwind CSS (via AssetMapper) | design sur-mesure, sans étape de build npm |
-| Front — configurateur devis | React (option, plus tard) | composant isolé, pas de SPA globale |
+| Front — interactivité | JavaScript natif (`assets/js/mosltrans.js`) | menu, bandeau cookies, suivi d'envoi (`fetch` JSON), copie d'adresse |
+| Front — carte | Leaflet (via AssetMapper) | trajet d'un envoi suivi |
+| Front — style | CSS écrit à la main (`assets/styles/mosltrans.css`) ; Tailwind CSS (via AssetMapper) pour la connexion, la page de succès du contact et le back-office | sans étape de build npm |
+
+> **Écart entre le choix initial et le code livré.** Le périmètre du 2026-08-20
+> (section « Front » plus bas) prévoyait HTMX et Alpine.js pour l'interactivité,
+> Tailwind pour tout le style et React pour un configurateur de devis. Au final,
+> HTMX, Alpine.js et React n'ont pas été utilisés : le site vitrine, intégré dans
+> Twig (PR #44), repose sur du JavaScript natif et du CSS écrit à la main, et le
+> back-office sur EasyAdmin. Tailwind n'est utilisé que sur quelques templates.
+> Les sections ci-dessous gardent le raisonnement d'origine, à titre d'historique.
 
 ## Backend Symfony — périmètre retenu
 
@@ -58,7 +66,7 @@ devis :
 À ne faire qu'une fois le back-office leads stable — c'est un bonus, pas une
 dépendance du coeur du projet.
 
-## Front — périmètre retenu (2026-08-20)
+## Front — périmètre retenu (2026-08-20, choix initial)
 
 - **Site vitrine** : Twig (rendu serveur Symfony natif) + HTMX/Alpine.js pour
   l'interactivité légère (préféré à Symfony UX/Stimulus-Turbo : même philosophie
